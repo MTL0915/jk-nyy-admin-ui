@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			requireOption = {
+				path : "../"
+			}
+		</script>
+		<script src="../LWZ.js"></script>
+		<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+		<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+		<!-- 新 Bootstrap 核心 CSS 文件 -->
+		<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+		<link  />
+		<style>
+			html,body { width: 100%;height: 100%; padding:0; margin: 0; }
+			#map { height:100%;width:80%; }
+			#caozuo { position: absolute;height:100%;width:20%;right:0;top:0; }
+		</style>
+	</head>
+	<body>
+		<div id='map'></div>
+		<div id='caozuo'>
+			<div>
+				<button onclick='daoru()'>导入数据</button>
+				<button onclick='daochu()'>导出数据</button>
+			</div>
+			
+			<div>
+				<button >添加多边形</button>
+				<button >添加点</button>
+				<button >添加线</button>
+			</div>
+			
+			<div class="panel panel-primary">
+			    <div class="panel-body">
+			       	<div class="form-group">
+					    <label for="name">选择Symbol类型</label>
+					    <select onchange='selectSymbol.apply(this,arguments);' class="form-control selectSymbolType">
+						    <option>picturemarkersymbol</option>
+						    <option>simplefillsymbol</option>
+						    <option>picturefillsymbol</option>
+						    <option>simplelinesymbol</option>
+						    <option>textsymbol</option>
+					    </select>
+					</div>
+			    </div>
+			</div>
+			
+			<div class="panel panel-primary">
+			    <div id='simplefillsymbol' class="panel-body">
+				  	<div class="form-group">
+					    <label for="name">填充类型</label>
+					    <select onchange='graphic.symbol.setStyle($(this).val());  layer.refresh();' class="form-control simplefillsymbol_tclx">
+					    	<option>solid</option>
+						    <option>STYLE_BACKWARD_DIAGONAL</option>	
+							<option>STYLE_CROSS</option>	
+							<option>STYLE_DIAGONAL_CROSS</option>	
+							<option>STYLE_FORWARD_DIAGONAL</option>	
+							<option>STYLE_HORIZONTAL</option>	
+							<option>STYLE_NULL</option>	
+							<option>STYLE_VERTICAL</option>
+					    </select>
+				  	</div>
+				  	
+				  	<div class="form-group">
+					    <label for="name">填充颜色</label>
+					   	<input type='color' onchange='graphic.symbol.setColor(colorTo($(this).val()));  layer.refresh();' class='simplefillsymbol_tcys' />
+				  	</div>
+				  	
+				  	<div class="form-group">
+					    <label for="name">填充透明度</label>
+					   	<input type='range' onchange='graphic.symbol.color.a = $(this).val()/100; layer.refresh();' class='simplefillsymbol_tctmd' />
+				  	</div>
+				  	
+				  	<div class="form-group">
+					    <label for="name">边框线类型</label>
+					    <select onchange='graphic.symbol.outline.setStyle($(this).val());  layer.refresh();' class="form-control simplefillsymbol_bkxlx">
+					    	<option>solid</option>	
+						    <option>STYLE_BACKWARD_DIAGONAL</option>	
+							<option>STYLE_CROSS</option>	
+							<option>STYLE_DIAGONAL_CROSS</option>	
+							<option>STYLE_FORWARD_DIAGONAL</option>	
+							<option>STYLE_HORIZONTAL</option>	
+							<option>STYLE_NULL</option>	
+							<option>STYLE_VERTICAL</option>
+					    </select>
+				  	</div>
+				  	
+				  	<div class="form-group">
+					    <label for="name">边框线颜色</label>
+					    <input type='color' onclick='graphic.symbol.outline.setColor(colorTo($(this).val()));  layer.refresh();' class='simplefillsymbol_bkxys'/>
+				  	</div>
+				  	
+				  	<div class="form-group">
+					    <label for="name">边框线宽度</label>
+					    <select onclick='graphic.symbol.outline.setWidth($(this).val());  layer.refresh();' class="form-control simplefillsymbol_bkxkd">
+					    	<option>0</option>	
+						    <option>1</option>	
+							<option>2</option>	
+							<option>3</option>	
+							<option>4</option>	
+							<option>5</option>	
+					    </select>
+				  	</div>
+			    </div>
+			</div>
+
+			<div class="panel panel-primary">
+			    <div class="panel-body">
+			    	<div class="btn-group btn-group-lg">
+					    <button type="button" class="btn btn-default">恢复</button>
+					</div>
+		    	</div>
+		    </div>
+		</div>
+	</body>
+	
+	<script>
+		var map,
+			layer,
+			esriEdit,
+			graphic,
+			selectSymbolTypeId;
+		Lwz.require([
+			'map/mapLoad',
+		],function(mapLoad){
+			mapLoad.mapload(function(_map){
+				map = _map;
+				map.showBaseMap("googleLayer");
+				layer = new esri.layers.GraphicsLayer();
+			})
+			
+			mapLoad.maploadEnd(function(_map){
+				var extent = new esri.geometry.Extent({"xmin":12620141.331714977,"ymin":2652298.1784457806,"xmax":12623198.812846463,"ymax":2653662.10166928,spatialReference:map.spatialReference});
+				_map.setExtent(extent);
+			})
+			
+		})
+
+		function selectSymbol(){
+			//隐藏上一个选中的symbol操作页面
+			$("#"+selectSymbolTypeId).hide();
+			//修改当前选中selectSymbol
+			selectSymbolTypeId = $(this).val();
+			//显示选中的symbol操作页面
+			var $dom = $("#"+selectSymbolTypeId);
+			$dom.show();
+			
+			if( selectSymbolTypeId === graphic.symbol.type )
+				huifumorenSymbol[selectSymbolTypeId]($dom);
+			
+		}
+
+		function daochu(){
+			Lwz.require([
+				'map/util/printer',
+			],function(printer){
+				printer.export_layer(layer);
+			})
+		}
+
+		function daoru(){
+			var input = document.createElement("input");
+			input.type= 'file';
+			input.onchange = function(){
+				var files = input.files;//获取到文件列表
+		        if(files.length == 0){
+		            alert('请选择文件');
+		        }else{
+		            var reader = new FileReader();//新建一个FileReader
+		            reader.onload = function(evt){ //读取完文件之后会回来这里
+		                var fileString = JSON.parse(evt.target.result); // 读取文件内容
+		                Lwz.require([
+							'map/util/printer',
+						],function(printer){
+							setLayer(printer.import_layer(fileString,map))
+						})
+		            }
+		            reader.readAsText(files[0], "UTF-8");//读取文件 
+		        }
+			}
+			input.click();
+		}
+		
+		var setLayer = function(_layer){
+			if( layer ) layer.clear();
+			layer = _layer;
+			layer.on("click",function(e){
+				if( e.graphic ) setGraphic(e.graphic);
+			})
+		}
+		
+		//确定当前选中对象
+		var setGraphic = function(gra){
+			graphic = gra;
+			showEidtHtml(gra);
+		}
+		
+		var editGraphic = function(graphic,index){
+			require([ 'esri/toolbars/edit' ],function(Edit){
+				esriEdit || (esriEdit = new Edit(map));
+				esriEdit.activate(index||1,graphic);
+			})		
+		}
+		
+		var showEidtHtml = function(graphic){
+			var symbol = graphic.symbol;
+			//调整好类型
+			$(".selectSymbolType").val(symbol.type);
+			$(".selectSymbolType").change();
+		}
+		
+		var huifumorenSymbol = {	
+			simplefillsymbol : function($dom){
+				//如果跳转的编辑页面等于几何的symbol
+				var symbol = graphic.symbol;
+				$dom.find(".simplefillsymbol_bkxlx").val(symbol.outline.style);
+				$dom.find(".simplefillsymbol_bkxys").val(colorTo(symbol.outline.color));
+				$dom.find(".simplefillsymbol_bkxkd").val(parseInt(symbol.outline.width));
+				$dom.find(".simplefillsymbol_tcys").val(colorTo(symbol.color));
+				$dom.find(".simplefillsymbol_tclx").val(symbol.style)
+				$dom.find(".simplefillsymbol_tctmd").val(symbol.color.a*100);
+			},
+		}
+		
+		var colorTo = function(json){
+			if( typeof json == 'string' ){
+				json = json.split('');
+				return {
+					r : parseInt(json[1]+json[2],16),
+					g : parseInt(json[3]+json[4],16),
+					b : parseInt(json[5]+json[6],16), 
+				}
+			}
+			var a = json.r.toString(16);
+			a < 10 ? a= "0"+a : a ; 
+			var b = json.g.toString(16);
+			b < 10 ? b= "0"+b : b ;
+			var c = json.b.toString(16);
+			c < 10 ? c= "0"+c : c ;
+			return "#"+a+b+c;
+		}
+		
+	</script>
+</html>

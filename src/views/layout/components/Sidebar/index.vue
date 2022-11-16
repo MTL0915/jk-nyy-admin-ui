@@ -1,0 +1,203 @@
+<template>
+  <el-scrollbar wrap-class="scrollbar-wrapper">
+    <div style="height:100%;background-size:cover" :style="{background:sidebarBgc}">
+          <!-- <el-menu class="menu" id="mainMenu" :background-color="sidebarBgc"  :show-timeout="200" :default-active="$route.path" :collapse="isCollapse" :unique-opened="$store.state.settings.uniqueOpened" :default-openeds="openeds" mode="vertical" text-color="#FFF" active-text-color="#409EFF"> -->
+      <el-menu class="menu" id="mainMenu" :show-timeout="200" :default-active="$route.path" :collapse="isCollapse" :unique-opened="$store.state.settings.uniqueOpened" :default-openeds="openeds" mode="vertical" text-color="#FFF" active-text-color="#409EFF">
+        <Logo :is-collapse="isCollapse" :title="title" :img="img" :fontSize="fontSize" class="logo" ref="logo" v-if="title.length <= 5" />
+        <div class="sidebar-content">
+          <sidebar-item v-for="(route, index) in permission_routers" ref="menu" :item="route" :key="index" :base-path="route.path"/>
+          <sidebar-item ref="menu" :item=" {
+              name: '应用中心',
+              path: '/appcenter',
+              redirect: 'noredirect',
+              alwaysShow: true,
+              hidden: false,
+              meta: {
+                  title: '应用中心',
+                  icon: 'resource'
+              },
+              children: [
+                  {
+                      name: '水肥系统',
+                      path: 'fertilizer',
+                      meta: {
+                          title: '水肥系统',
+                          icon: 'strategy'
+                      }
+                  }
+              ]
+            }" :key="99998" :base-path="'/appcenter'"/>
+        </div>
+        <div style="display: block;width: 100%;height: 40px;position: absolute;bottom: 0px;">
+          <div style="float:right;height:100%;padding-top:10px;width:40px;text-align: center;cursor:pointer">
+            <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />	
+          </div>
+          
+          <div style="float:right;font-size:13px;color:#FFF;line-height:45px;padding-right: 30px;cursor:pointer;cursor:hand;display:none">
+            <i class="el-icon-setting" style="font-size:15px;"/>&nbsp;<span>自定义导航</span>
+          </div>
+        </div>
+      </el-menu>
+    </div>
+
+
+    <!-- <div style="display: block;width: 100%;height: 40px;background: #0F1012;position: absolute;bottom: 0px;"> -->
+    <!-- <div style="display: block;width: 100%;height: 40px;background: transparent;position: absolute;bottom: 0px;">
+    	<div style="float:right;border-left: 1px solid #262626;height:100%;padding-top:10px;width:40px;text-align: center;cursor:pointer">
+    		<hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />	
+    	</div>
+    	
+      <div style="float:right;font-size:13px;color:#FFF;line-height:45px;padding-right: 30px;cursor:pointer;cursor:hand;display:none">
+        <i class="el-icon-setting" style="font-size:15px;"/>&nbsp;<span>自定义导航</span>
+      </div>
+    	
+    </div> -->
+    <div style="position:absolute;top:35px;left:20px;" data-step="1" v-intro="'欢迎使用农语云，请跟着指引快速了解一下系统吧'" v-intro-position="'top'"></div>
+    <div style="position:absolute;top:177px;left:35px" data-step="2" v-intro="'在这里添加设备'" v-intro-position="'bottom'"></div>
+    <div style="position:absolute;top:307px;left:35px" data-step="3" v-intro="'设备传感器的实时、历史数据展示中心'" v-intro-position="'bottom'"></div>
+    <div style="position:absolute;top:355px;left:35px" data-step="4" v-intro="'定义设备报警及自动化控制策略'" v-intro-position="'bottom'"></div>
+		
+  </el-scrollbar>
+  
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+import SidebarItem from './SidebarItem'
+import Hamburger from '@/components/Hamburger'
+import Logo from './Logo'
+import img from '@/assets/logo/serveModeBg.png'
+import bus from "@/components/common/bus.js";
+import logoTitle from "@/mixins/logoTitle"
+export default {
+  // props: {
+  //   title: {
+  //     type: String,
+  //     default: ''
+  //   },
+  //   img: {
+  //     type: String,
+  //     default: ''
+  //   },
+  //   fontSize: {
+  //     type: String,
+  //     default: 19
+  //   }
+  // },
+  components: {
+    SidebarItem,
+    Hamburger,
+    Logo
+  },
+  computed: {
+    ...mapGetters([
+      'permission_routers',
+      'sidebar',
+      'baseInfo'
+    ]),
+    isCollapse() {
+      return !this.sidebar.opened
+    }
+  },
+  mixins: [logoTitle],
+  data(){
+  	return {
+			openeds:['/myresources'],
+      routeKey:1,
+      fontSize: 19,
+      sidebarBgc: "#1e1e28"
+  	}
+  },
+  created() {
+    bus.$on("getBaseList", () => {
+      this.getSidebarBgc();
+    });
+  },
+  methods:{
+  	toggleSideBar() {
+      this.$store.dispatch('ToggleSideBar')
+      this.getTitle();
+      this.getSidebarBgc();
+      // this.$refs.logo.getTitle();
+    },
+    // 获取菜单栏背景颜色
+    getSidebarBgc() {
+      if (this.baseInfo.sidebarBgc) {
+        if (typeof this.baseInfo.sidebarBgc === "string") {
+          this.baseInfo.sidebarBgc = JSON.parse(this.baseInfo.sidebarBgc)
+        }
+        if (this.baseInfo.sidebarBgc.backgroundImage) {
+          this.sidebarBgc = `url(${process.env.IMG_URL} + ${this.baseInfo.sidebarBgc.backgroundImage})`
+        } else if (this.baseInfo.sidebarBgc.backgroundColor) {
+          this.sidebarBgc = this.baseInfo.sidebarBgc.backgroundColor
+          // this.sidebarBgc = `url(${img})`
+
+        } else {
+          this.sidebarBgc = "#1e1e28"
+        }
+      } else {
+        this.sidebarBgc = "#1e1e28"
+      }
+    }
+  },
+  watch: {
+    baseInfo() {
+      this.getTitle();
+      this.getSidebarBgc();
+    }
+  }
+}
+</script>
+<style rel="stylesheet/scss" lang="scss">
+.el-menu-item{
+	height:40px !important;
+  line-height: 40px !important;
+  
+}
+.el-submenu__title:hover,.el-menu-item:hover {
+  background-color: #0f1012
+}
+.el-menu-item.is-active {
+   background:#0f1012
+}
+.el-menu-item.logo{
+	height:50px !important;
+	line-height: 44px !important;
+}
+.sidebar-content {
+  height:calc(100% - 80px);
+  overflow:auto
+}
+.el-menu--vertical {
+  // background: #0f1012;
+  background: #0f1012;
+}
+// .el-submenu is-active is-opened
+.el-menu {
+  // background: #1e1e28
+  background: transparent;
+}
+// .menu{
+//   //height:calc(100% - 40px) !important
+//   //background: #1e1e28;
+//   background: url("../../../../assets/logo/serveModeBg.png")
+// }
+//定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸
+.sidebar-content::-webkit-scrollbar,.menu::-webkit-scrollbar {
+    // background-color: #1E1E28;
+    width: 0px;
+    height: 100%;
+}
+//定义滚动条轨道 内阴影+圆角
+// .sidebar-content::-webkit-scrollbar-track,.menu::-webkit-scrollbar-track {
+//     box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+//     border-radius: 10px;
+//     // background-color: #1E1E28;
+// }
+// //定义滑块 内阴影+圆角
+// .sidebar-content::-webkit-scrollbar-thumb,.menu::-webkit-scrollbar-thumb {
+//     border-radius: 10px;
+//     box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+//     // background-color: #1E1E28;
+// }
+</style>

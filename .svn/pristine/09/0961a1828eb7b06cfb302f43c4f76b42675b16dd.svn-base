@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html >
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<style type="text/css">
+		.jwplayer .jw-icon-barlogo-new:before {
+			content: none;
+		}
+		/* 下自定义 播放器logo */
+		.jw-icon-barlogo-new {
+			background: url('http://cyberplayer.bcelive.com/icon/logo.png') no-repeat;
+			background-position: center;
+		}
+		html,body {
+			height: 100%;
+			width: 100%;
+			margin : 0;
+			overflow: hidden;
+		}
+	</style>
+	<script src="cyberplayer-3.4.1/jquery-1.11.0.js"> </script>
+	<script src="./cyberplayer-3.4.1/cyberplayer.js"> </script>
+	<script>
+		var param = function(url){
+        
+        var p = {};
+        
+        url = url.substring(1,url.length);
+    
+        url = url.split("&");
+    
+        for(var i in url){
+    
+            var it = url[i];
+    
+            it = it.split("=");
+    
+            p[it[0]]= decodeURI(url[i].substring(it[0].length+1,url[i].length));
+            
+        }
+        
+        return p;
+        
+    }(location.search);
+		/**
+		自建流 rtmp 页面必须放在服务器, 本地打开无效
+		*/
+		function playerRTMP(url){
+			var addr = param.rtmp;
+			console.log("addr ="+addr)
+			var player = cPlayer(addr);
+			player.onError(function(event){ 
+				setTimeout(function(){
+					console.log("--------------onError re ")
+					 cPlayer(addr);
+				}, 3000 )
+			});
+		}
+		
+		
+		
+		
+		/*	function playerHLS(){
+			let id = getQueryString("id");
+			$.get("stream_hls_view/"+id, function(result){
+				cPlayer("./"+result.play);
+			});
+		}*/
+	
+		function getQueryString(name) { 
+	        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+	        var r = window.location.search.substr(1).match(reg); 
+	        if (r != null) return unescape(r[2]); 
+	        return null; 
+	    } 
+		function ptzCtr(param, another){
+			let id = getQueryString("id");
+			sendPtzCommand(id, param, another)
+		}
+		function sendPtzCommand(id, param, another){
+			$.get("ptz_ctr_start?id="+id+"&param="+param+"&another="+another, function(result){
+				console.log(result);
+			});
+		}
+	</script>
+	<title>main</title>
+</head>
+
+<body>
+	<div id="content" width="60%" height="" style="width: 680; height: 500px"></div>
+	<img id='loading' src='./zwsp.jpg' style='width:100%;height:100%;position:absolute;top:0;left:0;z-index:9' />
+	<div> 
+	
+	<script>
+		
+		function cPlayer(url) {
+			var player = cyberplayer("content").setup({
+				width: '100%', // 宽度，也可以支持百分比(不过父元素宽度要有)
+				height: "100%", // 高度，也可以支持百分比
+				title: "基本功能", // 标题
+				file: url, // 播放地址
+				autostart: true, // 是否自动播放
+				stretching: "exactfit", // 拉伸设置
+				repeat: false, // 是否重复播放
+				volume: 100, // 音量
+				controls: true, // controlbar是否显示
+				starttime: 10// 视频开始播放时间点(单位s)，如果不设置，则可以从上次播放时间点续播
+				, ak: "8fa5f129aa3e4d52af02666e4d43884a"//百度云的 AK 
+				, controlbar: {
+					barLogo: false
+				},
+				rtmp: {
+					reconnecttime: 99999, // rtmp直播的重连次数
+					bufferlength: 0 // 缓冲多少秒之后开始播放 默认1秒
+				}
+			});
+			
+			player.onReady(function(){
+				document.getElementById("loading").remove();
+			})
+			
+			return player;
+			
+		}
+		
+		playerRTMP();
+		
+	</script>
+</body>
+
+</html>

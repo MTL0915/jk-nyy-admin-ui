@@ -1,0 +1,62 @@
+<div>
+	
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	        	编辑模式
+	    </div>
+	    <div class="panel-body">
+	        <div class="btn-group">
+			    <button type="button" bind-click="yidong" class="btn btn-default">移动(q)</button>
+			    <button type="button" bind-click="fuzhi" class="btn btn-default">复制(e)</button>
+			    <button type="button" bind-click="delete" class="btn btn-default">删除(r)</button>
+			</div>
+	    </div>
+	</div>
+	
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	        	编辑属性
+	    </div>
+	    <div class="panel-body">
+	    	<div class="form-group">
+			    <label class="sr-only" for="name">弹出框链接</label>
+			    <input type="text" bind-change="upadateIframeSrc" class="form-control iframeSrc" id="name" placeholder="请输入iframe">
+			</div>
+	    </div>
+	</div>
+	
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	        	编辑Symbol
+	    </div>
+	    <div class="panel-body">
+	    	<div class="form-group">
+			    <label  for="name">颜色</label>
+			    <input type="color" class="form-control fontColor" bind-change="updateGraphicColor" id="name" placeholder="请输入iframe">
+			</div>
+			<div class="form-group">
+			    <label  for="name">文本</label>
+			    <input type="text" class="form-control text" bind-change="updateGraphicText" id="name" placeholder="请输入iframe">
+			</div>
+			<div class="form-group">
+			    <label  for="name">字体大小</label>
+			    <input type="range" class="form-control fontSize" bind-change="updateGraphicFontSize" id="name" placeholder="请输入iframe">
+			</div>
+	       
+	    </div>
+	</div>
+	
+	<div class="panel panel-default">
+	    <div class="panel-footer">
+	    	<div class="btn-group">
+			    <button type="button" bind-click="closeEdit" class="btn btn-default">取消编辑</button>
+			</div>
+			<div class="btn-group">
+			    <button type="button" bind-click="closeEdit" class="btn btn-default">添加到自定义类型</button>
+			</div>
+	    </div>
+	</div>
+	
+	
+</div>
+

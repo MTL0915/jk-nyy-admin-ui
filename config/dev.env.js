@@ -1,0 +1,35 @@
+'use strict'
+const merge = require('webpack-merge')
+const prodEnv = require('./prod.env')
+
+module.exports = merge(prodEnv, {
+  NODE_ENV: '"development"',
+
+  
+  //BASE_API: '"http://172.16.2.58:8000/nyy/admin"',
+  // BASE_API: '"http://121.32.129.19:8100/nyy/admin"',     //服务器
+  BASE_API: '"http://iot.joinken.cn/nyy/admin"',
+  // BASE_API: '"https://iot.joinken.cn/nyy/admin82"',  
+
+  VISUAL_API: '"http://121.32.129.19:8100/dv2_nyy"',
+
+  // IMG_URL: '"http://172.16.2.58"', //本地
+  //IMG_URL: '"http://121.32.129.19:8100"',
+  IMG_URL: '"https://iot.e-jiankun.com"',
+
+  VIDEO_URL: '"http://192.168.33.181:8123"',
+  
+  // VR图片路径
+  // VR_IMGPATH : '"http://172.16.2.58/"',
+  VR_IMGPATH : '"http://121.32.129.19:8100/"',
+  // VR_IMGPATH : '"https://iot.joinken.cn/"',
+  
+  // WEBSOCKET_URL:'"172.16.2.58:9005/iotcs-websocket/socketServer"',
+  //WEBSOCKET_URL:'"121.32.129.19:8100/iotcs-websocket/socketServer"'
+  WEBSOCKET_URL:'"iot.joinken.cn/iotcs-websocket/socketServer"',
+  // WEBSOCKET_URL:'"iot.joinken.cn/iotcs-websocket82/socketServer"'
+
+  // DOMAIN:'"172.16.2.58:8000"'
+  DOMAIN:"'iot.e-jiankun.com'"//临时
+  
+})

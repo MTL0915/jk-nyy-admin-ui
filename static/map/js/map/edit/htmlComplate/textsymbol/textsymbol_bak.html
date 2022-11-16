@@ -1,0 +1,34 @@
+<div>
+			
+	<div style="">
+		<span> 编辑模式 </span>
+		<input type="button" value="移动" bind-click="yidong" />
+		<input type="button" value="复制" bind-click="fuzhi"/>
+	</div>
+	
+	<div style="">
+		<span> 编辑属性 </span>
+		<div>
+			<span> 弹出框链接 </span>
+			<input class="iframeSrc" type="text" bind-change="upadateIframeSrc" /> 
+		</div>
+	</div>
+	
+	<div style="">
+		<span> 编辑Symbol </span>
+		<div>
+			<span> 颜色 </span>
+			<input class="fontColor" bind-change="updateGraphicColor" type="color" />
+		</div>
+		<div>
+			<span> 文本 </span>
+			<input class="text" bind-change="updateGraphicText" type="text" />
+		</div>
+		<div>
+			<span> 字体大小 </span>
+			<input class="fontSize" bind-change="updateGraphicFontSize" type="range" />
+		</div>
+	</div>
+	
+</div>
+

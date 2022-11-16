@@ -1,0 +1,63 @@
+<div>
+	
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	        	编辑模式
+	    </div>
+	    <div class="panel-body">
+	        <div class="btn-group">
+			    <button type="button" bind-click="yidong" class="btn btn-default">移动(q)</button>
+			    <button type="button" bind-click="fuzhi" class="btn btn-default">复制(e)</button>
+			    <button type="button" bind-click="delete" class="btn btn-default">删除(r)</button>
+			</div>
+	    </div>
+	</div>
+	
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	            编辑属性
+	            <button type="button" class="btn btn-default btn-xs" bind-click="addAttributes">添加属性</button>
+	    </div>
+	    <div class="panel-body attributes">
+	    	<div class="form-group">
+			    <label class="sr-only" for="name">弹出框链接</label>
+			    <input type="text" bind-change="upadateIframeSrc" class="form-control iframeSrc" id="name" placeholder="请输入iframe">
+			</div>
+			<!--<div class="form-group">
+			    <label class="sr-only" for="name">层级高度</label>
+			    <input type="text" bind-change="ZIndex" class="form-control" id="name" placeholder="请输入Zindex">
+			</div>-->
+	    </div>
+	</div>
+	
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	        	编辑Symbol
+	    </div>
+	    <div class="panel-body">
+	    	<div class="form-group">
+			    <label  for="name">图标</label>
+			    <img style="width: 25px;height:25px;" src="" bind-click="updateGraphicImage" class="img-circle graphicImage"/>
+			    <!--<input type="file" class="form-control graphicImage" bind-change="updateGraphicImage" id="name">-->
+			</div>
+			<div class="form-group">
+			    <label  for="name">大小</label>
+			    <input class="form-control graphicImageSize" bind-change="updateGraphicImageSize" type="range">
+			</div>
+	  </div>
+	</div>
+	
+	<div class="panel panel-default">
+	    <div class="panel-footer">
+	    	<div class="btn-group">
+			    <button type="button" bind-click="closeEdit" class="btn btn-default">取消编辑</button>
+			</div>
+			<div class="btn-group">
+			    <button type="button" bind-click="closeEdit" class="btn btn-default">添加到自定义类型</button>
+			</div>
+	    </div>
+	</div>
+	
+	
+</div>
+

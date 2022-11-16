@@ -1,0 +1,39 @@
+<div>
+			
+	<div style="">
+		<span> 编辑模式 </span>
+		<input type="button" value="移动" bind-click="yidong" />
+		<input type="button" value="边框" bind-click="biankuang"/>
+		<input type="button" value="复制" bind-click="fuzhi"/>
+	</div>
+	
+	<div style="">
+		<span> 编辑属性 </span>
+		<div>
+			<span> 弹出框链接 </span>
+			<input type="text" bind-change="upadateIframeSrc" /> 
+		</div>
+		<!--<div>
+			<span> 层级Zindex </span>
+			<input type="text" bind-change="ZIndex" /> 
+		</div>-->
+	</div>
+	
+	<div style="">
+		<span> 编辑Symbol </span>
+		<div>
+			<span> 颜色 </span>
+			<input bind-change="updateGraphicColor" type="color" />
+		</div>
+		<div>
+			<span> 边框颜色 </span>
+			<input bind-change="updateGraphicBorderColor" type="color" />
+		</div>
+		<div>
+			<span> 透明度 </span>
+			<input bind-change="updateGraphicOpacity" type="range" />
+		</div>
+	</div>
+	
+</div>
+

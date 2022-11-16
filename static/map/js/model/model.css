@@ -1,0 +1,70 @@
+.table_content { height: 100%;width: 100%; position:absolute;top: 0;left: 0; z-index: 99; }
+.table_content::before {
+	position:absolute;
+	height: 100%;
+	width: 100%;
+	background: #333;
+	opacity: 0.3;
+	content: "";
+	top: 0;
+	left: 0; }
+.redfont { color: red; }
+.fonts { font-size: 12px; margin-left: 3px; }
+.table_menu_content { }
+.datav-label { display: flex; padding:9px 0px 0px; }
+.datav-field { }
+.inputText_symbol1 { border-radius: 4px;background: #1c222b;padding: 0 9px;height: 32px;line-height: 32px;font-size: 12px;width: calc(100% - 18px );color: #d4d4d4;border-width: 1px;border-color: #333; }
+.table_menu { 
+	position: absolute;
+    width: 400px;
+    padding: 15px;
+    background: #27343e;
+    color: #fff;
+    border-color: #000;
+    border-width: 1px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%); 
+}
+
+
+
+.input_select {
+	position:relative;
+}
+.input_select input {
+    border-radius: 4px;
+    background: #1c222b;
+    padding: 0 9px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 12px;
+    width: calc(100% - 18px );
+    color: #d4d4d4;
+    border-width: 1px;
+    border-color: #333;
+}
+.table_menu .selectOption {
+	width: 100%;
+    background: #1c222b;
+    border: solid 1px #333;
+    position: absolute;
+    display: none;
+}
+.table_menu .selectOption > div {
+    padding: 3px 3px;
+	font-size: 12px;
+}
+.table_menu .selectOption > div:hover {
+    background: #303940;
+}
+
+.table_menu .btn {
+	float: right;
+    border-radius: 8px;
+    border: solid 1px #1c222b;
+    background: #1c222b;
+    padding: 5px 8px;
+    margin-top: 8px;
+    cursor: pointer;
+}

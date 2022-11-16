@@ -1,0 +1,646 @@
+<template>
+  <div>
+    <eHeader
+      ref="eHeader"
+      :sup_this="sup_this"
+      :query="query"
+      @refreshList="init"
+    />
+    <el-card shadow="never">
+      <div
+        class="flex bottom-content"
+        style="text-align: left;"
+      />
+      <el-table
+        ref="multipleTable"
+        :data="data"
+        :tree-props="{ children: 'children' }"
+        tooltip-effect="dark"
+        style="width: 100%;"
+        row-key="id"
+        @cell-dblclick="view"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column
+          type="selection"
+          width="55"
+          align="center"
+        />
+        <el-table-column
+          sortable
+          prop="rs_facilities_name"
+          label="所在地块"
+        />
+
+        <el-table-column
+          sortable
+          prop="name"
+          label="设备名称"
+        />
+        <el-table-column
+          sortable
+          prop="device_id"
+          label="设备编号"
+        />
+
+        <el-table-column
+          sortable
+          prop="hd_device_type_name"
+          label="设备类型"
+        />
+        <el-table-column
+          sortable
+          key="4"
+          prop="hd_device_parent_device_id"
+          label="隶属设备"
+        />
+
+        <el-table-column
+          sortable
+          prop="labels"
+          label="标签"
+        >
+          <template slot-scope="scope">
+            <el-tag
+              v-for="tag in getLabels(scope.row.labels)"
+              :key="tag"
+              style="margin-right:10px"
+            >{{tag}}</el-tag>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          sortable
+          :formatter="
+              dateFormat"
+          prop="system_response_time"
+          width="130"
+          label="更新时间"
+        />
+
+        <el-table-column
+          label="绑定状态"
+          align="center"
+          prop="bind_sta"
+        >
+          <template slot-scope="scope">
+            <span
+              :class="scope.row.bind_sta === 1 ? 'normal' : 'grep'"
+              class="table-span"
+            >{{ scope.row.bind_sta === 1 ? '绑定' : '未绑定' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="设备状态"
+          align="center"
+          prop="state"
+        >
+          <template slot-scope="scope">
+            <span
+              :class="scope.row.state | getStateClass"
+              class="table-span"
+            >
+              {{
+                scope.row.state | getStateDes
+              }}
+            </span>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          label="设备来源"
+          align="center"
+          prop="state"
+          v-if="query.rs_facilities_id"
+        >
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.rs_facilities_id === query.rs_facilities_id">地块设备</el-tag>
+            <el-tag
+              v-else
+              type="warning"
+            >分享设备</el-tag>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          v-if="!exportData"
+          label="操作"
+          align="left"
+          width="220"
+        >
+          <template slot-scope="scope">
+            <el-dropdown
+              split-button
+              size="mini"
+              type="primary"
+              @click="view(scope.row)"
+              @command="handelWatch($event, scope.row)"
+            >
+              查看
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item
+                  command="getPara"
+                  v-if="checkDeviceControl(scope.row.id)"
+                >获取设备参数</el-dropdown-item>                
+                <!-- <el-dropdown-item command="sensor">查看数据/控制</el-dropdown-item> -->
+              </el-dropdown-menu>
+            </el-dropdown>
+
+            <el-dropdown
+              split-button
+              size="mini"
+              type="primary"
+              @click="edit(scope.row)"
+              @command="handleCommand($event, scope.row)"
+            >
+              编辑
+              <el-dropdown-menu slot="dropdown">
+                <!-- <el-dropdown-item v-if="scope.row.hd_device_parent_id == null" command="addChild">添加子设备</el-dropdown-item> -->
+                <el-dropdown-item
+                  command="bind"
+                  v-if="checkDeviceControl(scope.row.id)"
+                >
+                  {{
+                    scope.row.bind_sta === 0 ? '设备绑定' : '设备解绑'
+                  }}
+                </el-dropdown-item>
+
+                <el-dropdown-item
+                  command="analog"
+                  v-if="checkDeviceControl(scope.row.id)"
+                >数据上报</el-dropdown-item>
+                <el-dropdown-item
+                  command="deviceImgUpload"
+                  v-if="checkDeviceControl(scope.row.id)"
+                >图片上传</el-dropdown-item>
+                <el-dropdown-item
+                  command="attributeDefine"
+                  v-if="checkDeviceControl(scope.row.id)"
+                >属性定义</el-dropdown-item>
+                <el-dropdown-item
+                  command="submitRepair"
+                  v-if="checkDeviceControl(scope.row.id)"
+                >故障申报</el-dropdown-item>
+                <el-dropdown-item
+                  v-show="scope.row.hd_device_type_code === 'JK-LD'"
+                  command="led"
+                  v-if="checkDeviceControl(scope.row.id)"
+                >LED显示屏控制</el-dropdown-item>
+                <el-dropdown-item
+                  v-show="scope.row.hd_device_type_code === 'SN-CJ'"
+                  command="sainuo"
+                  v-if="checkDeviceControl(scope.row.id)"
+                >角度调整</el-dropdown-item>
+                <el-dropdown-item
+                  v-show="scope.row.hd_device_type_code === 'JK-GK'"
+                  command="gkSetPara"
+                  v-if="checkDeviceControl(scope.row.id)"
+                >通用网关设置参数</el-dropdown-item>
+                <el-dropdown-item command="collectedData">传感器数据</el-dropdown-item>
+                <!-- <el-dropdown-item command="configInfo">关联用户管理</el-dropdown-item> -->
+                <el-dropdown-item
+                  command="delete"
+                  v-if="checkDeviceControl(scope.row.id)"
+                >删除</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!--分页组件-->
+      <el-pagination
+        :total="total"
+        :current-page="page + 1"
+        style="margin-top: 8px;"
+        :page-sizes="[10,20,30,40,50,100, 200, 300, 400,500]"
+        layout="total, prev, pager, next, sizes"
+        @size-change="sizeChange"
+        @current-change="pageChange"
+      />
+    </el-card>
+    <!-- <equip-kzl ref="kzlHtml" /> -->
+
+    <!-- <form
+      v-show="false"
+      ref="zjtpyunForm"
+      action="http://wlw2.zjtpyun.com/user/vali/login"
+      method="post"
+      style="display:none"
+      target="_blank"
+    >
+      <input
+        type="text"
+        name="username"
+        value="nnwm"
+      >
+      <input
+        type="password"
+        name="password"
+        value="123456"
+      >
+      <input
+        type="hidden"
+        name="redirectURL"
+        value="/"
+      >
+      <input
+        type="submit"
+        name="提交"
+      >
+    </form> -->
+
+    <equip-para ref="equipPara" />
+    <equip-detail ref="equipDetail" />
+    <loading ref="loading" />
+    <AnalogData ref="analog" />
+    <collectedData ref="collectedData" />
+    <el-dialog
+      v-if="ledDialogVisible"
+      :visible.sync="ledDialogVisible"
+      title="LED显示屏控制"
+      append-to-body
+      width="1000px"
+    >
+      <LedConfig ref="led" />
+    </el-dialog>
+    <el-dialog
+      v-if="deviceImgUploadDialogVisible"
+      :visible.sync="deviceImgUploadDialogVisible"
+      title="设备上传图片"
+      append-to-body
+      width="500px"
+    >
+      <deviceImgUpload :hd_device_id="hd_device_id" />
+    </el-dialog>
+    <el-dialog
+      append-to-body
+      title="设备属性定义"
+      v-if="deviceAttributeDialogVisible"
+      :visible.sync="deviceAttributeDialogVisible"
+    >
+      <deviceAttribute :hd_device_id="deviceAttributeId" />
+    </el-dialog>
+    <el-dialog
+      append-to-body
+      v-if="submitRepairShow"
+      :visible.sync="submitRepairShow"
+      width="90%"
+    >
+      <submitRepair ref="submitRepair" />
+    </el-dialog>
+    <el-dialog
+      title="通用网关设置参数"
+      append-to-body
+      v-if="gkSetParaDialogVisible"
+      :visible.sync="gkSetParaDialogVisible"
+      width="800px"
+    >
+      <gkSetPara :hd_device_id="deviceAttributeId" />
+    </el-dialog>
+    <el-dialog
+      title="赛诺光谱仪角度设置"
+      append-to-body
+      v-if="sainuoDialogVisible"
+      :visible.sync="sainuoDialogVisible"
+      width="800px"
+    >
+      <sainuo :hd_device_id="deviceAttributeId" />
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+// import { Loading } from 'element-ui'
+import { bindOrUnbindDevice } from '@/utils/websocket_util'
+import { deleteDevice } from '@/api/equip'
+// import { isFloat } from '@/utils/basetype'
+import { mapGetters } from 'vuex'
+import DeviceNow from './module/DeviceNow'
+import EquipDetail from './module/EquipDetail'
+import AnalogData from './module/AnalogData'
+import LedConfig from './module/LedConfig'
+// import bus from '@/components/common/bus'
+import initData from '@/mixins/initData'
+import loading from '@/components/loading'
+import eHeader from './module/header'
+import EquipPara from './module/EquipPara'
+import sensorContent from '@/views/device/components/Content'
+import DeviceShow from './module/DeviceShow'
+import collectedData from './module/CollectedData'
+import checkDeviceControl from '@/utils/device_permission'
+import deviceImgUpload from './module/deviceImgUpload'
+import deviceAttribute from './module/deviceAttribute'
+import submitRepair from './repair/submitRepair'
+import gkSetPara from './module/gkSetPara'
+import sainuo from './module/sainuo'
+
+export default {
+  name: 'EquipContent',
+  components: {
+    eHeader,
+    DeviceNow,
+    EquipPara,
+    EquipDetail,
+    loading,
+    sensorContent,
+    AnalogData,
+    LedConfig,
+    DeviceShow,
+    collectedData,
+    deviceImgUpload,
+    deviceAttribute,
+    submitRepair,
+    gkSetPara,
+    sainuo,
+  },
+  props: {
+    //是否为导出数据页面
+    exportData: {
+      type: Boolean,
+      default: false
+    }
+  },
+  mixins: [initData],
+  data () {
+    return {
+      deviceAttributeId: null,
+      deviceAttributeDialogVisible: false,
+      ledDialogVisible: false,
+      show: { JKLVisible: false, KZLVisible: false },
+      sensorContentVisible: false,
+      multipleSelection: [],
+      childform: {},
+      type: '',
+      selectedNode: null,
+      query: {
+        sta: null,
+        rs_facilities_id: null,
+        conditionValue: null,
+      },
+      sensorcontentdeviceid: null,
+      sup_this: this,
+      hd_device_id: null,
+      deviceImgUploadDialogVisible: false,
+      submitRepairShow: false,
+      gkSetParaDialogVisible: false,
+      sainuoDialogVisible: false,
+    }
+  },
+  computed: {
+    ...mapGetters(['id'])
+  },
+  created () {
+    this.$nextTick(() => {
+      this.init()
+    })
+    /* bus.$on('handelOrgBaseClick', (msg, node) => {
+      this.cur_page = 1
+      this.selectedNode = node
+      this.requestData = msg // 提交后刷新列表数据用
+    })*/
+  },
+  methods: {
+    checkDeviceControl,
+    //标签数组
+    getLabels (labels) {
+      if (labels) {
+        return labels.split(',')
+      } else {
+        return []
+      }
+    },
+    handelTest () {
+      this.$refs.DeviceShow.dialogVisible = true
+    },
+    beforeInit () {
+      this.url = 'hd/hd_device/deviceList'
+      const query = this.query
+      const rs_facilities_id = query.rs_facilities_id
+
+      this.params = {
+        page: (this.page + 1),
+        size: this.size,
+        bs_base_id: this.$store.state.baseinfo.cur_base_id,
+        rs_facilities_id: rs_facilities_id,
+        level: this.$store.state.baseinfo.cur_user_level
+      }
+      if (this.query.conditionValue) {
+        this.params[this.$refs.eHeader.condition.value] = this.query.conditionValue
+      }
+
+      if (query.sta === 1) {
+        this.params['state'] = 1
+      } else if (query.sta === 2) {
+        this.params['state'] = 0
+      } else if (query.sta === 3) {
+        this.params['bind_sta'] = 1
+      } else if (query.sta === 4) {
+        this.params['bind_sta'] = 0
+      }
+      return true
+    },
+    edit (row) {
+      // this.$refs.equipEdit.handelEdit(
+      //   row.id,
+      //   this.$store.state.baseinfo.cur_base_id
+      // )
+      this.$router.push({ path: '/deviceEdit', query: { id: row.id, breadcrumb: 'hide' } })
+    },
+    upData () { },
+
+    handelChildAdd (row) {
+      this.childform = {
+        device_id: '',
+        verification_code: '',
+        hd_device_parent_id: row.id
+      }
+      this.type = 'child'
+      this.$refs.equipAdd.handelAdd()
+    },
+    handelBind (row) {
+      var hd_device_id = row.id
+      var state = 0
+      if (row.bind_sta === 0) {
+        state = 1 // 表示绑定
+        this.$refs.loading.loading_dialog_text = '正在绑定设备，请等待！'
+      } else {
+        this.$refs.loading.loading_dialog_text = '正在解绑设备，请等待！'
+      }
+      this.$refs.loading.openLoadInstance()
+      bindOrUnbindDevice(hd_device_id, state, this.$ws)
+        .then(res => {
+          // this.init()
+          row.state = res.data.state
+          row.bind_sta = res.data.bind_sta
+          this.$message.success(res.msg)
+          this.$refs.loading.closeLoadInstance()
+        })
+        .catch(err => {
+          this.$message.error(err.msg)
+          this.$refs.loading.closeLoadInstance()
+        })
+    },
+    view (row) {
+      var base = this.$router && this.$router.options && this.$router.options.base;
+      if (base === undefined) {
+        base = "";
+      }
+      if (row.hd_device_type_code === 'JK-WT') {//无人投料车 || 无人投料船
+        window.open("http://121.32.129.19:8100/zljqr/#/sb_caozuo?device_id=" + row.device_id + "&device_type=" + row.hd_device_type_code.substring(3))
+      }
+      // else if (row.hd_device_type_code === 'JK-FM') {
+      //   this.$router.push({ path: '/jkfmDeviceInfo', query: { device_id: row.device_id, breadcrumb: 'hide' } })
+      // } 
+      else if (row.hd_device_type_code === 'JK-WA' || row.hd_device_type_code === 'JK-WC') {
+        // 开沟施肥机、无人喷药车
+        window.open("/unmannedMap?device_id=" + row.device_id + "&id=" + row.id)
+      } else if (row.hd_device_type_code === 'JK-GY') {
+        // 轨道运输车
+        window.open("/unmannedMapGdc?device_id=" + row.device_id + "&id=" + row.id);
+      } else if (row.device_id === "CD01A-1900001") {//托普云农页面
+        // this.$refs.zjtpyunForm.submit();
+      } else if (row.hd_device_type_code === 'IK-CO') {
+        this.$router.push({ path: '/equipIflytekCO', query: { id: row.id, breadcrumb: 'hide' } })
+      } else if (row.hd_device_type_code === 'IK-XJ') {
+        this.$router.push({ path: '/equipIflytekXJ', query: { id: row.id, breadcrumb: 'hide' } })
+      } else if (row.hd_device_type_code === 'YM-FW') {
+        this.$router.push({ path: '/equipYunmuFW', query: { id: row.id, breadcrumb: 'hide' } })
+      } else {
+        //this.$refs.equipJkl.handelWatch(row.id, row.device_id)
+        this.$router.push({ path: '/deviceInfo', query: { id: row.id, breadcrumb: 'hide' } })
+      }
+    },
+    handelWatch (command, row) {
+      if (command === 'getPara') {
+        this.$refs.equipPara.showDialog(row.id)
+      } else if (command === 'sensor') {
+        this.sensorcontentdeviceid = row.id
+        this.sensorContentVisible = true
+      }
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    handelDelete (row) {
+      this.$confirm('删除会将设备关联的相关资源一同进行删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          const data = {
+            bs_user_id: this.id,
+            hd_device_id: row.id
+          }
+          deleteDevice(data)
+            .then(res => {
+              if (res.code === 200) {
+                this.init()
+                this.$message.success('删除成功!')
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+            .catch(() => { })
+        })
+        .catch(() => {
+
+        })
+    },
+    handleCommand (command, row) {
+      if (command === 'addChild') {
+        this.handelChildAdd(row)
+      } else if (command === 'bind') {
+        this.handelBind(row)
+      } else if (command === 'delete') {
+        this.handelDelete(row)
+      } else if (command === 'analog') {
+        this.$refs.analog.dialogVisible = true
+        this.$refs.analog.getSensorList(row.id)
+      } else if (command === 'deviceImgUpload') {
+        this.hd_device_id = row.id
+        this.deviceImgUploadDialogVisible = true
+      } else if (command === 'getSta') {
+        this.$refs.deviceNow.showDevicePropertyValue(row.id)
+      } else if (command === 'gkSetPara') {
+        this.deviceAttributeId = row.id
+        this.gkSetParaDialogVisible = true
+      } else if (command === 'sainuo') {
+        this.deviceAttributeId = row.id
+        this.sainuoDialogVisible = true
+      } else if (command === 'led') {
+        this.ledDialogVisible = true
+        this.$nextTick(() => {
+          this.$refs.led.init(false, row.id, row.communication)
+        })
+      } else if (command === 'collectedData') {
+        this.$refs.collectedData.showDialog(row.id)
+      } else if (command === 'attributeDefine') {
+        this.deviceAttributeId = row.id
+        this.deviceAttributeDialogVisible = true
+      } else if (command === 'submitRepair') {
+        this.submitRepairShow = true
+        this.$nextTick(() => {
+          this.$refs.submitRepair.hd_device_id = row.id
+          this.$refs.submitRepair.equipForm = {
+            bs_base_id: row.bs_base_id,
+            bs_base_name: row.bs_base_name,
+            rs_facilities_id: row.rs_facilities_id,
+            rs_facilities_name: row.rs_facilities_name,
+            device_id: row.device_id,
+            name: row.name,
+          }
+        })
+      }
+    }
+  }
+}
+</script>
+
+<style lang="stylus" scoped>
+@import '~@/assets/css/common.styl'
+
+.card
+  card()
+
+.flex
+  display flex
+  align-items center
+
+.el-form >>> label
+  padding 0
+
+.el-form-item
+  margin-bottom 0
+
+.left-btn
+  .el-button+.el-button
+    margin-left 5px
+
+.bottom-content
+  justify-content space-between
+
+.el-table
+  font-size 14px
+
+.table-span
+  color #fff
+  padding 2px 5px
+  border-radius 25px
+
+.normal
+  background #1AB394
+
+.abnormal
+  background #F56C6C
+
+.grep
+  background #909399
+
+.bottom-bar
+  justify-content space-between
+
+.bottom-text
+  font-size 12px
+  color #777
+</style>

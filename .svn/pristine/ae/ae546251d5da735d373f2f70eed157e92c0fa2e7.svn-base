@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+    <link rel="icon" type="image/x-ico" href="/static/logo.png">
+    <style>
+      .sampleContainer{position:fixed;top:50%;left:50%;-webkit-transform:translateX(-50%) translateY(-50%);width:75px;height:100px}.loader{position:relative;width:44px;height:8px;margin:12px auto}.dot{display:inline-block;width:8px;height:8px;border-radius:4px;background:#ccc;position:absolute}.dot_1{animation:animateDot1 1.5s linear infinite;left:12px;background:#e579b8}.dot_2{animation:animateDot2 1.5s linear infinite;animation-delay:.5s;left:24px}.dot_3{animation:animateDot3 1.5s linear infinite;left:12px}.dot_4{animation:animateDot4 1.5s linear infinite;animation-delay:.5s;left:24px}@keyframes animateDot1{0%{transform:rotate(0) translateX(-12px)}25%{transform:rotate(180deg) translateX(-12px)}75%{transform:rotate(180deg) translateX(-12px)}100%{transform:rotate(360deg) translateX(-12px)}}@keyframes animateDot2{0%{transform:rotate(0) translateX(-12px)}25%{transform:rotate(-180deg) translateX(-12px)}75%{transform:rotate(-180deg) translateX(-12px)}100%{transform:rotate(-360deg) translateX(-12px)}}@keyframes animateDot3{0%{transform:rotate(0) translateX(12px)}25%{transform:rotate(180deg) translateX(12px)}75%{transform:rotate(180deg) translateX(12px)}100%{transform:rotate(360deg) translateX(12px)}}@keyframes animateDot4{0%{transform:rotate(0) translateX(12px)}25%{transform:rotate(-180deg) translateX(12px)}75%{transform:rotate(-180deg) translateX(12px)}100%{transform:rotate(-360deg) translateX(12px)}}
+    </style>
+
+    <script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+
+
+    <!--82
+    <script src='./static/cdn/vue.min.js'></script>
+    <script src="./static/cdn/axios.js"></script>
+    <script src="./static/cdn/vuex.js"></script>
+    <script src='./static/cdn/dynamicCdn.js'></script>
+    <script src='./static/cdn/echarts.min.js'></script>
+    <script src='./static/cdn/vue-router.min.js'></script>
+    <script src='./static/cdn/jquery.min.js'></script>
+    <script src='./static/cdn/three.min.js'></script>
+    <script src="./static/cdn/element-ui.js"></script>
+    <link rel="stylesheet" href="./static/cdn/element-ui.css">
+    <link href='./static/map/css/webgis.css' rel='stylesheet' />-->
+
+    <!--华为-->
+    <script src='/static/cdn/vue.min.js'></script>
+    <script src="/static/cdn/axios.js"></script>
+    <script src="/static/cdn/vuex.js"></script>
+    <script src='/static/cdn/dynamicCdn.js'></script>
+    <script src='/static/cdn/echarts.min.js'></script>
+    <script src='/static/cdn/vue-router.min.js'></script>
+    <script src='/static/cdn/jquery.min.js'></script>
+    <script src='/static/cdn/three.min.js'></script>
+    <script src="/static/cdn/element-ui.js"></script>
+    <link rel="stylesheet" href="/static/cdn/element-ui.css">
+    <link href='/static/map/css/webgis.css' rel='stylesheet' />
+	
+	 <!--百度地图-->
+    <script src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=pg8IqHGLaSbPpznz8EdDqEi9KXqbxC3P"></script>
+
+
+    <style>
+      * {
+        -webkit-user-select: text !important;
+        -moz-user-select: text !important;
+        -ms-user-select: text !important;
+        user-select: text !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="sampleContainer" id="sampleContainer">
+        <div class="loader">
+          <span class="dot dot_1"></span>
+          <span class="dot dot_2"></span>
+          <span class="dot dot_3"></span>
+          <span class="dot dot_4"></span>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    window.onload = function() {
+      var getBrowserInfo = function() {
+        const theUA = window.navigator.userAgent.toLowerCase()
+        if (theUA.match(/msie/) || theUA.match(/trident/)) {
+          // 若果是IE浏览器、或者 trident 内核
+          document.getElementById("sampleContainer").style.display = "none";
+          document.body.innerHTML='<center><FONT SIZE="7" COLOR="blue"><br>农语云数据管理平台</FONT></center><div style="margin:auto;padding-top:25px;line-height:30px;width:950px"><B><FONT SIZE="3" COLOR="red">建议使用360浏览器的极速模式或谷歌浏览器登录本系统。<A HREF="https://down.360safe.com/se/360se13.1.6200.0.exe" style="color:blue"><U>360浏览器下载</U></A><A HREF="https://dubapkg.cmcmcdn.com/cs/239ald/ChromeSetup.exe" style="color:blue;margin-left:15px"><U>谷歌浏览器下载</U> </A>  <div style="text-align:left">360浏览器极速模式设置如下：</div></FONT></B></div><center><IMG SRC="/static/360_help.jpg" BORDER="0" ALT="" style="height:500px"></center>';
+        }
+      }
+      getBrowserInfo()
+    }
+  </script>
+</html>

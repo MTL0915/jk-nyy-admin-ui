@@ -1,0 +1,324 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  /* background: #171b22!important; */
+}
+
+.head_one {
+  height: 50px;
+  box-shadow: 1px 0px 3px #000;
+}
+
+.head_one::after {
+  content: '';
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 2px;
+  /*animation: do 10s linear 0s infinite;*/
+  background-image: linear-gradient(-181deg, #00deff 0, #00baff 74%);
+  box-shadow: 0px 1px 3px #000;
+}
+
+@keyframes do {
+  0% {
+    background-image: linear-gradient(-181deg, #ffffff 0, #00deff 74%);
+  }
+
+  50% {
+    background-image: linear-gradient(-181deg, #00deff 0, #ffffff 74%);
+  }
+
+  100% {
+    background-image: linear-gradient(-181deg, #ffffff 0, #00deff 74%);
+  }
+}
+
+.content {
+  position: relative;
+  height: 100%;
+}
+
+.menu_content {
+  position: absolute;
+  width: 182px;
+  height: 100%;
+  background-image: linear-gradient(-90deg, rgba(0, 222, 255, .6) 0, rgba(0, 174, 255, .19) 100%);
+  box-shadow: 0 0 20px 0 rgba(55, 224, 255, .3);
+}
+
+/*i {
+	width: 20px;
+	height: 20px;
+	display: block;
+}*/
+
+.ziti {
+  background: url("./img/符号-字体.png");
+}
+
+.layer-manager-item {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 6px;
+  position: relative;
+  background: #1b1f25;
+  cursor: pointer;
+  flex: none;
+  height: 48px;
+  padding-left: 8px;
+}
+
+.layer-manager-item.selected {
+  background: #00baff;
+  color: #373d41;
+}
+
+.layer-manager-item:hover {
+  color: #fff;
+  background: rgba(143, 225, 255, .1);
+}
+
+.layer-manager-item .layer-item-thumbail {
+  width: 53px;
+  height: 34px;
+  flex: none;
+  display: block;
+  border: 1px solid #3a4659;
+  background: #282a30;
+  color: #373d41;
+  list-style: none;
+  line-height: 2;
+  user-select: none;
+}
+
+.layer-manager-item .layer-manager-thumbail {
+  flex: auto;
+  padding-left: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.layer-manager-item .layer-item-span {
+  flex: auto;
+  text-indent: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+span {
+  color: inherit;
+}
+
+* {
+  outline: 0;
+}
+
+.list_menu {
+  width: 150px;
+  height: 100%;
+  color: #9ca8b2;
+  font-size: 12px;
+  background: #1b1f25;
+  position: absolute;
+  box-shadow: 1px -1px 3px #04070d;
+  display: none;
+}
+
+.map_content {
+  /*margin-left: 150px;*/
+  height: 100%;
+}
+
+.map {
+  height: 100%;
+}
+
+.chuangjian {
+  background: url(../img/新建.png) 5px 12.5px / 25px no-repeat;
+  background-position: center;
+  margin: auto;
+  height: 100%;
+}
+
+.dingwei {
+  background: url(../img/定位.png) 5px 12.5px / 25px no-repeat;
+  background-position: center;
+  margin: auto;
+  height: 100%;
+}
+
+.quyu {
+  background: url(../img/x_区域.png) 5px 12.5px / 25px no-repeat;
+  background-position: center;
+  margin: auto;
+  height: 100%;
+}
+
+.jiankong {
+  background: url(../img/日常家电—摄像头_btn.png) 5px 12.5px / 25px no-repeat;
+  background-position: center;
+  margin: auto;
+  height: 100%;
+}
+
+.chuangan {
+  background: url(../img/传感器.png) 5px 12.5px / 25px no-repeat;
+  background-position: center;
+  margin: auto;
+  height: 100%;
+}
+
+.head_title {
+  float: left;
+  height: 50px;
+  line-height: 50px;
+  padding-left: 34px;
+  background-image: url(../img/地图1.png);
+  background-repeat: no-repeat;
+  background-size: 25px;
+  background-position-y: 12.5px;
+  background-position-x: 5px;
+  color: #1abbf6;
+  font-size: 16px;
+}
+
+.optGroup {
+  width: 300px;
+  height: 100%;
+  margin-left: 151px;
+  text-align: center;
+  color: #9ca8b2;
+  font-size: 12px;
+  display: flex;
+}
+
+.optGroup_btn {
+  width: 50px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.optGroup_btn:hover {
+  background-image: linear-gradient(-90deg, rgba(0, 222, 255, .6) 0, rgba(0, 174, 255, .19) 100%);
+  box-shadow: 0 0 20px 0 rgba(55, 224, 255, .3);
+}
+
+.optGroup_btn .image {
+  width: 50px;
+  height: 30px;
+}
+
+.main {
+  display: none;
+  border-top: solid 1px;
+  background: #27343e;
+  color: #ffffff;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 250px;
+  font-size: 12px;
+  height: calc(100% - 1px);
+}
+
+.main::before {
+  content: '';
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 2px;
+  background-image: linear-gradient(-181deg, #00deff 0, #00baff 74%);
+}
+
+.main_name {
+  padding-bottom: 5px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.main_control {
+  padding: 11px 15px;
+}
+
+.main_control_name {
+  border-bottom: solid 1px #939393;
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+  color: #bcc9d4;
+  font-size: 14px;
+}
+
+.addGeometrySelect {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.addGeometrySelect img {
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.addGeometrySelect img:hover {
+  animation: box 1s linear 0s 1;
+  animation-fill-mode: forwards;
+}
+
+.addGeometrySelect img:active {
+  transform: scale(0.9);
+  transition: transform 0.3s;
+}
+
+@keyframes box {
+  from {
+    box-shadow: 1px 1px 8px #000;
+  }
+
+  to {
+    box-shadow: 1px 1px 8px #fff;
+  }
+}
+
+.colorpickerField {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  background: url(./images/select.png);
+}
+
+.colorpickerField div {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 28px;
+  height: 28px;
+  background: url(./images/select2.png) center;
+}
+
+.inputText_symbol1 {
+  border-radius: 4px;
+  background: #1c222b;
+  padding: 0 9px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  width: calc(100% - 18px);
+  color: #d4d4d4;
+  border-width: 1px;
+  border-color: #333;
+}
