@@ -13,14 +13,16 @@
         </el-form-item>
         <el-form-item label="主设备" prop="firstEquipment" v-show="firstFormIsShow">
           <el-select v-model="shuifeiForm.firstEquipment" placeholder="请选择主设备" @change="selectFirstEquipment">
-            <el-option label="SF02A-2110019" value="SF"></el-option>
-            <el-option label="AB02A-0000001" value="AB"></el-option>
+            <el-option v-for="item in deviceListArr" :key="item.device_id" :label="item.device_id" :value="item.device_id"></el-option>
+            <!-- <el-option label="SF02A-2110019" value="SF02A-2110019"></el-option>
+            <el-option label="AB02A-0000001" value="AB02A-0000001"></el-option> -->
           </el-select>
         </el-form-item>
         <el-form-item label="副设备" prop="secondEquipment" v-show="firstFormIsShow">
           <el-select v-model="shuifeiForm.secondEquipment" placeholder="请选择副设备" :disabled="secondEquipmentBan">
-            <el-option label="PK01B-2111020" value="shanghai"></el-option>
-            <el-option label="PK01B-0000001" value="beijing"></el-option>
+            <el-option v-for="item in deviceListArr" :key="item.device_id" :label="item.device_id" :value="item.device_id"></el-option>
+            <!-- <el-option label="PK01B-2111020" value="PK01B-2111020"></el-option>
+            <el-option label="PK01B-0000001" value="PK01B-0000001"></el-option> -->
           </el-select>
         </el-form-item>
         <el-form-item label="环境数据大类" prop="envCheckList" v-show="firstFormIsShow">
@@ -28,9 +30,9 @@
             <el-checkbox v-for="(item,index) in envAllList" :key="index" :label="item" name="envCheckList"></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item label="摄像头" prop="cameraCheckList" v-show="firstFormIsShow">
-          <el-checkbox-group v-model="shuifeiForm.cameraCheckList">
-            <el-checkbox v-for="(item,index) in cameraAllList" :key="index" :label="item" name="cameraCheckList"></el-checkbox>
+        <el-form-item label="摄像头" prop="sxtCheckList" v-show="firstFormIsShow">
+          <el-checkbox-group v-model="shuifeiForm.sxtCheckList">
+            <el-checkbox v-for="item in sxtListArr" :key="item.id" :label="item.name" name="sxtCheckList"></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="A模块" v-show="secondFormIsShow">
@@ -131,9 +133,25 @@
 </template>
 
 <script>
+import { deviceList } from '@/api/device'
+import { getSxtList } from '@/api/sxt'
 export default {
+  created(){
+    // 获取当前基地id
+    this.bs_base_id = this.$store.state.baseinfo.cur_base_id
+    // 获取当前基地设备，用于主设备与副设备
+    this.getDeviceList()
+    // 获取当前基地摄像头
+    this.getGetSxtList()
+  },
   data() {
     return {
+      // 基地id
+      bs_base_id: "",
+      // 设备列表
+      deviceListArr: "",
+      // 摄像头列表
+      sxtListArr: "",
       operateType: "add",
       isShow: false,
       firstFormIsShow: true,
@@ -144,7 +162,7 @@ export default {
         firstEquipment: "",
         secondEquipment: "",
         envCheckList: [],
-        cameraCheckList: [],
+        sxtCheckList: [],
         firstRadio: "",
         secondRadio: "",
         thirdRadio: "",
@@ -163,14 +181,12 @@ export default {
         envCheckList: [
           { type: 'array', required: false, message: '请选择环境数据', trigger: 'change' }
         ],
-        cameraCheckList: [
+        sxtCheckList: [
           { type: 'array', required: false, message: '请选择摄像头', trigger: 'change' }
         ],
       },
       // 环境数据
       envAllList: ['气象台','网关'],
-      // 摄像头数据
-      cameraAllList: ['摄像头01','摄像头02','摄像头03','摄像头04','摄像头05','摄像头06','摄像头07'],
       // 级联选择框数据
       options: [
         {
@@ -212,8 +228,8 @@ export default {
           firstEquipmentPK: "PK01B-2110019",
           firstEquipmentPC: "PC01B-2110019",
           secondEquipment: "PK01B-2111020",
-          sensor: "风速、气温、ph、EC",
-          camera: "摄像头01",
+          sensor: "气象台、网关",
+          camera: "摄像头01、摄像头02",
         },
         {
           id: "00002",
@@ -223,16 +239,44 @@ export default {
           firstEquipmentPK: "PK01B-2110014",
           firstEquipmentPC: "PC01B-2110014",
           secondEquipment: "PK01B-2111020",
-          sensor: "风速、气温、降雨量",
+          sensor: "气象台、网关",
           camera: "摄像头02",
         },
       ],
     };
   },
   methods: {
+    getDeviceList(){
+      const data = {
+        bs_base_id: this.bs_base_id,
+      }
+      deviceList(data)
+        .then(res => {
+          if (res.code === 200) {
+            this.deviceListArr = res.data.content
+          } else {
+
+          }
+        })
+        .catch(() => {})
+    },
+    getGetSxtList(){
+      const data = {
+        bs_base_id: this.bs_base_id,
+      }
+      getSxtList(data)
+        .then(res => {
+          if (res.code === 200) {
+            this.sxtListArr = res.data.content
+          } else {
+
+          }
+        })
+        .catch(() => {})
+    },
     selectFirstEquipment(){
       console.log(this.shuifeiForm.firstEquipment)
-      if(this.shuifeiForm.firstEquipment == 'SF'){
+      if(this.shuifeiForm.firstEquipment.substr(0, 2) == 'SF'){
         this.secondEquipmentBan = false
       }else{
         this.shuifeiForm.secondEquipment = ""
@@ -275,7 +319,7 @@ export default {
         firstEquipment: "",
         secondEquipment: "",
         envCheckList: [],
-        cameraCheckList: [],
+        sxtCheckList: [],
         firstRadio: "",
         secondRadio: "",
         thirdRadio: "",
@@ -289,9 +333,18 @@ export default {
         }
         this.firstFormIsShow = false
         this.secondFormIsShow = true
-        console.log(this.envCheckList)
       })
-    }
+    },
+    submit() {
+      console.log('submit!');
+      this.$refs.form.validate().then(valdid => {
+        if (!valdid) {
+          return
+        }
+        console.log(this.shuifeiForm)
+        this.isShow = false
+      })
+    },
   },
 };
 </script>
