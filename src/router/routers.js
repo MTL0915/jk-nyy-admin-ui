@@ -500,7 +500,7 @@ export const constantRouterMap = [
               {
                 path: "/appcenter/fertilizer",
                 meta: {
-                  title: "水肥系统",
+                  title: "水肥应用",
                   name: "fertilizer",
                   hideTitle: false,
                   noCache: true

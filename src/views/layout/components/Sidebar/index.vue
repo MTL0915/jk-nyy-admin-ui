@@ -18,10 +18,10 @@
               },
               children: [
                   {
-                      name: '水肥系统',
+                      name: '水肥应用',
                       path: 'fertilizer',
                       meta: {
-                          title: '水肥系统',
+                          title: '水肥应用',
                           icon: 'strategy'
                       }
                   }
