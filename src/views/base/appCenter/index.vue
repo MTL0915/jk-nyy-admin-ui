@@ -19,17 +19,17 @@
           </el-form-item>
           <el-form-item label="主设备" prop="firstEquipment">
             <el-select v-model="shuifeiForm.firstEquipment" placeholder="请选择主设备" @change="selectFirstEquipment">
-              <el-option v-for="item in firstEquipmentList" :key="item.device_id" :label="item.name + ' ' + item.device_id" :value="item.device_id"></el-option>
+              <el-option v-for="item in firstEquipmentList" :key="item.id" :label="item.name + ' ' + item.device_id" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="副设备" prop="secondEquipment">
             <el-select v-model="shuifeiForm.secondEquipment" placeholder="请选择副设备" :disabled="secondEquipmentBan">
-              <el-option v-for="item in deviceListArr" :key="item.device_id" :label="item.name" :value="item.device_id"></el-option>
+              <el-option v-for="item in deviceListArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="采集设备" prop="pickEquipment">
             <el-select v-model="shuifeiForm.pickEquipment" multiple placeholder="请选择采集设备" @change="getEnvList">
-              <el-option v-for="item in pickEquipmentList" :key="item.device_id" :label="item.name" :value="item.device_id"></el-option>
+              <el-option v-for="item in pickEquipmentList" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="摄像头" prop="sxtCheckList">
@@ -39,9 +39,9 @@
             <el-select v-model="shuifeiForm.sxtCheckList" multiple placeholder="请选择摄像头" @change="getCameraList">
               <el-option
                 v-for="item in sxtListArr"
-                :key="item.device_id"
+                :key="item.id"
                 :label="item.name"
-                :value="item.device_id">
+                :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -54,10 +54,10 @@
               <el-radio label="3">日志</el-radio>
             </el-radio-group>
             <el-select v-if="shuifeiForm.firstRadio==1" v-model="shuifeiForm.AData" multiple placeholder="请选择环境数据">
-              <el-option v-for="item in envList" :key="item.device_id" :label="item.name" :value="item.device_id"></el-option>
+              <el-option v-for="item in envList" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
             <el-select v-if="shuifeiForm.firstRadio==2" v-model="shuifeiForm.AData" multiple placeholder="请选择摄像头">
-              <el-option v-for="item in cameraList" :key="item.device_id" :label="item.name" :value="item.device_id"></el-option>
+              <el-option v-for="item in cameraList" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
             <el-select v-if="shuifeiForm.firstRadio==3" v-model="shuifeiForm.AData" multiple placeholder="请选择日志">
               <el-option v-for="item in logList" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -70,10 +70,10 @@
               <el-radio label="3">日志</el-radio>
             </el-radio-group>
             <el-select v-if="shuifeiForm.secondRadio==1" v-model="shuifeiForm.BData" multiple placeholder="请选择环境数据">
-              <el-option v-for="item in envList" :key="item.device_id" :label="item.name" :value="item.device_id"></el-option>
+              <el-option v-for="item in envList" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
             <el-select v-if="shuifeiForm.secondRadio==2" v-model="shuifeiForm.BData" multiple placeholder="请选择摄像头">
-              <el-option v-for="item in cameraList" :key="item.device_id" :label="item.name" :value="item.device_id"></el-option>
+              <el-option v-for="item in cameraList" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
             <el-select v-if="shuifeiForm.secondRadio==3" v-model="shuifeiForm.BData" multiple placeholder="请选择日志">
               <el-option v-for="item in logList" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -86,10 +86,10 @@
               <el-radio label="3">日志</el-radio>
             </el-radio-group>
             <el-select v-if="shuifeiForm.thirdRadio==1" v-model="shuifeiForm.CData" multiple placeholder="请选择环境数据">
-              <el-option v-for="item in envList" :key="item.device_id" :label="item.name" :value="item.device_id"></el-option>
+              <el-option v-for="item in envList" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
             <el-select v-if="shuifeiForm.thirdRadio==2" v-model="shuifeiForm.CData" multiple placeholder="请选择摄像头">
-              <el-option v-for="item in cameraList" :key="item.device_id" :label="item.name" :value="item.device_id"></el-option>
+              <el-option v-for="item in cameraList" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
             <el-select v-if="shuifeiForm.thirdRadio==3" v-model="shuifeiForm.CData" multiple placeholder="请选择日志">
               <el-option v-for="item in logList" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -155,6 +155,7 @@
 <script>
 import { deviceList } from '@/api/device'
 import { getSxtList } from '@/api/sxt'
+import { productSfList } from '@/api/shuifei'
 export default {
   created(){
     // 获取当前基地id
@@ -163,6 +164,8 @@ export default {
     this.getDeviceList()
     // 获取当前基地摄像头
     this.getGetSxtList()
+    // 获取水肥应用列表
+    // this.getProductSfList()
   },
   data() {
     return {
@@ -304,6 +307,23 @@ export default {
         })
         .catch(() => {})
     },
+    // 获取水肥应用列表（主列表）
+    // getProductSfList(){
+    //   const data = {
+    //     bs_base_id: this.bs_base_id,
+    //     page: 1,
+    //     size: 10
+    //   }
+    //   productSfList(data)
+    //     .then(res => {
+    //       if (res.code === 200) {
+    //         this.tableData = res.data.content
+    //       } else {
+
+    //       }
+    //     })
+    //     .catch(() => {})
+    // },
     // 选择了主设备后，判断是否能选择副设备
     selectFirstEquipment(){
       if(this.shuifeiForm.firstEquipment.substr(0, 2) == 'SF'){
@@ -318,7 +338,7 @@ export default {
       this.envList = []
       for(let i=0;i<=val.length-1;i++){
         this.pickEquipmentList.find((item)=>{
-          if(item.device_id == val[i]){
+          if(item.id == val[i]){
             this.envList.push(item)
           }
         });
@@ -329,7 +349,7 @@ export default {
       this.cameraList = []
       for(let i=0;i<=val.length-1;i++){
         this.sxtListArr.find((item)=>{
-          if(item.device_id == val[i]){
+          if(item.id == val[i]){
             this.cameraList.push(item)
           }
         });
