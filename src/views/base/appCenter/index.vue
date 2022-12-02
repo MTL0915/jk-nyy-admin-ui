@@ -22,11 +22,11 @@
               <el-option v-for="item in firstEquipmentList" :key="item.id" :label="item.name + ' ' + item.device_id" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="副设备" prop="secondEquipment">
+          <!-- <el-form-item label="副设备" prop="secondEquipment">
             <el-select v-model="shuifeiForm.secondEquipment" placeholder="请选择副设备" :disabled="secondEquipmentBan">
               <el-option v-for="item in deviceListArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="采集设备" prop="pickEquipment">
             <el-select v-model="shuifeiForm.pickEquipment" multiple placeholder="请选择采集设备" @change="getEnvList">
               <el-option v-for="item in pickEquipmentList" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -119,21 +119,27 @@
         <el-table-column fixed prop="name" label="名称" sortable>
         </el-table-column>
         <el-table-column
-          prop="firstEquipment"
+          prop="hd_device_name"
           label="主设备"
           sortable
         ></el-table-column>
         <el-table-column
+          prop="device_id"
+          label="主设备编号"
+          sortable
+        ></el-table-column>
+        <!-- <el-table-column
           prop="secondEquipment"
           label="副设备"
           sortable
         >
-        </el-table-column>
-        <el-table-column prop="sensor" label="传感器" sortable>
+        </el-table-column> -->
+        <el-table-column prop="productSfDevices" label="传感器" :formatter="sensorData" sortable>
         </el-table-column>
         <el-table-column
-          prop="camera"
+          prop="productSfDevices"
           label="摄像头"
+          :formatter="sxtData"
           sortable
         ></el-table-column>
         <el-table-column fixed="right" label="操作" width="150">
@@ -165,7 +171,7 @@ export default {
     // 获取当前基地摄像头
     this.getGetSxtList()
     // 获取水肥应用列表
-    // this.getProductSfList()
+    this.getProductSfList()
   },
   data() {
     return {
@@ -202,7 +208,7 @@ export default {
       shuifeiForm: {
         name: '',
         firstEquipment: "",
-        secondEquipment: "",
+        // secondEquipment: "",
         pickEquipment: [],
         sxtCheckList: [],
         firstRadio: "",
@@ -221,9 +227,9 @@ export default {
         firstEquipment: [
           { required: true, message: '请选择主设备', trigger: 'change' }
         ],
-        secondEquipment: [
-          { required: false, message: '请选择副设备', trigger: 'change' }
-        ],
+        // secondEquipment: [
+        //   { required: false, message: '请选择副设备', trigger: 'change' }
+        // ],
         pickEquipment: [
           { type: 'array', required: false, message: '请选择环境数据', trigger: 'change' }
         ],
@@ -234,26 +240,26 @@ export default {
 
       // 表格列表数据
       tableData: [
-        {
-          id: "00001",
-          name: "水肥01",
-          firstEquipment: "SF02A-2110019",
-          firstEquipmentPK: "PK01B-2110019",
-          firstEquipmentPC: "PC01B-2110019",
-          secondEquipment: "PK01B-2111020",
-          sensor: "气象台、网关",
-          camera: "摄像头01、摄像头02",
-        },
-        {
-          id: "00002",
-          name: "水肥02",
-          firstEquipment: "SF02A-2110014",
-          firstEquipmentPK: "PK01B-2110014",
-          firstEquipmentPC: "PC01B-2110014",
-          secondEquipment: "PK01B-2111020",
-          sensor: "气象台、网关",
-          camera: "摄像头02",
-        },
+        // {
+        //   id: "00001",
+        //   name: "水肥01",
+        //   firstEquipment: "SF02A-2110019",
+        //   firstEquipmentPK: "PK01B-2110019",
+        //   firstEquipmentPC: "PC01B-2110019",
+        //   secondEquipment: "PK01B-2111020",
+        //   sensor: "气象台、网关",
+        //   camera: "摄像头01、摄像头02",
+        // },
+        // {
+        //   id: "00002",
+        //   name: "水肥02",
+        //   firstEquipment: "SF02A-2110014",
+        //   firstEquipmentPK: "PK01B-2110014",
+        //   firstEquipmentPC: "PC01B-2110014",
+        //   secondEquipment: "PK01B-2111020",
+        //   sensor: "气象台、网关",
+        //   camera: "摄像头02",
+        // },
       ],
     };
   },
@@ -308,31 +314,50 @@ export default {
         .catch(() => {})
     },
     // 获取水肥应用列表（主列表）
-    // getProductSfList(){
-    //   const data = {
-    //     bs_base_id: this.bs_base_id,
-    //     page: 1,
-    //     size: 10
-    //   }
-    //   productSfList(data)
-    //     .then(res => {
-    //       if (res.code === 200) {
-    //         this.tableData = res.data.content
-    //       } else {
-
-    //       }
-    //     })
-    //     .catch(() => {})
-    // },
-    // 选择了主设备后，判断是否能选择副设备
-    selectFirstEquipment(){
-      if(this.shuifeiForm.firstEquipment.substr(0, 2) == 'SF'){
-        this.secondEquipmentBan = false
-      }else{
-        this.shuifeiForm.secondEquipment = ""
-        this.secondEquipmentBan = true
+    getProductSfList(){
+      const data = {
+        bs_base_id: this.bs_base_id,
       }
+      productSfList(data)
+        .then(res => {
+          if (res.code === 200) {
+            this.tableData = res.data.content
+            console.log(res)
+          } else {
+
+          }
+        })
+        .catch(() => {})
     },
+    // 显示传感器的值，处理这个数组，排除掉摄像头
+    sensorData(row){
+      let sensorArr = [];
+      row.productSfDevices.forEach((item)=>{
+        if(item.hd_device_type_code != 'JK-SX'){
+          sensorArr.push(item.hd_device_name);
+        };
+      });
+      return sensorArr.join('、');
+    },
+    // 显示摄像头的值，处理这个数组
+    sxtData(row){
+      let sxtArr = [];
+      row.productSfDevices.forEach((item)=>{
+        if(item.hd_device_type_code == 'JK-SX'){
+          sxtArr.push(item.hd_device_name);
+        };
+      });
+      return sxtArr.join('、');
+    },
+    // 选择了主设备后，判断是否能选择副设备
+    // selectFirstEquipment(){
+    //   if(this.shuifeiForm.firstEquipment.substr(0, 2) == 'SF'){
+    //     this.secondEquipmentBan = false
+    //   }else{
+    //     this.shuifeiForm.secondEquipment = ""
+    //     this.secondEquipmentBan = true
+    //   }
+    // },
     //获取环境数据数组列表(根据采集设备选中的值)
     getEnvList(val){
       this.envList = []
@@ -382,7 +407,7 @@ export default {
       this.shuifeiForm = {
         name: '',
         firstEquipment: "",
-        secondEquipment: "",
+        // secondEquipment: "",
         pickEquipment: [],
         sxtCheckList: [],
         firstRadio: "",
