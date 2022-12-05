@@ -8,6 +8,14 @@ export function productSfList(data) {
     params: data
   });
 }
+//设备ID查询详情
+export function getDetailById(data) {
+  return request({
+    url: "/hd/hd_device/getDetailById",
+    method: "get",
+    params: data
+  });
+}
 
 
 
