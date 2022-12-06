@@ -16,6 +16,22 @@ export function getDetailById(data) {
     params: data
   });
 }
+//表单发送
+export function productSfAddOrUpdate(data) {
+  return request({
+    url: "/hd/hd_product_sf/productSfAddOrUpdate",
+    method: "post",
+    data
+  });
+}
+//水肥应用根据id获取详情
+export function productSfDetail(data) {
+  return request({
+    url: "/hd/hd_product_sf/productSfDetail",
+    method: "get",
+    params: data
+  });
+}
 
 
 
