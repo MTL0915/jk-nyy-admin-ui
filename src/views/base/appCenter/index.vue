@@ -149,6 +149,7 @@ import { deviceList } from '@/api/device'
 import { getSxtList } from '@/api/sxt'
 import { productSfList, getDetailById, productSfAddOrUpdate } from '@/api/shuifei'
 import { getToken } from '@/utils/auth'
+import qs from "qs";
 export default {
   created(){
     // 获取当前基地id
@@ -326,6 +327,8 @@ export default {
     getProductSfList(){
       const data = {
         bs_base_id: this.bs_base_id,
+        page: 0,
+        size: 10
       }
       productSfList(data)
         .then(res => {
@@ -433,11 +436,22 @@ export default {
           return
         }
         let needSensor = (this.shuifeiForm.pickEquipment).concat(this.shuifeiForm.sxtCheckList)
+        let productSfModels = this.shuifeiForm.productSfModels
         let formData = new FormData()
         formData.append('name', this.shuifeiForm.name)
         formData.append('hd_device_id', this.shuifeiForm.hd_device_id)
-        formData.append('productSfDevices', needSensor)
-        formData.append('productSfModels', this.shuifeiForm.productSfModels)
+        needSensor.forEach((value, index) => {
+          formData.append(`productSfDevices[${index}]`, value)
+        })
+        // productSfModels.forEach((value, index) => {
+        //   // formData.append(`productSfModels[${index}].type`, value.type);
+        //   productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
+        //     formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_id`, value2.hd_device_id)
+        //     formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_sensor_id`, value2.hd_device_sensor_id)
+        //     formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].id`, value2.id)
+        //   })
+        //   // formData.append(`productSfModels[${index}].productSfModelDetails`, value.productSfModelDetails)
+        // })
         // let formData = {
         //   name: this.shuifeiForm.name,
         //   hd_device_id: this.shuifeiForm.hd_device_id,
@@ -445,6 +459,8 @@ export default {
         //   // productSfModels: this.shuifeiForm.productSfModels
         // }
         console.log(formData)
+        // let formData2 = qs.stringify()
+        // console.log(formData2)
         
         const config = {
           headers: { 'Content-Type': 'application/form-data', 'Authorization': 'Bearer ' + getToken() }
@@ -455,7 +471,7 @@ export default {
             console.log('提交成功')
           } else {
             this.$message.error(res.data.msg)
-            console.log('提交失败')
+            console.log(res)
           }
         })
 
