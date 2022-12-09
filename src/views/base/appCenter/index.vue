@@ -48,8 +48,8 @@
             <el-select v-if="shuifeiForm.productSfModels[0].type=='sensor'" v-model="shuifeiForm.productSfModels[0].productSfModelDetails" multiple placeholder="请选择环境数据" value-key="id">
               <el-option v-for="item in sensorList" :key="item.id" :label="item.device_name + ' - ' + item.name" :value="item"></el-option>
             </el-select>
-            <el-select v-if="shuifeiForm.productSfModels[0].type=='sxt'" v-model="shuifeiForm.productSfModels[0].productSfModelDetails" multiple placeholder="请选择摄像头">
-              <el-option v-for="item in cameraList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            <el-select v-if="shuifeiForm.productSfModels[0].type=='sxt'" v-model="shuifeiForm.productSfModels[0].productSfModelDetails" multiple placeholder="请选择摄像头" value-key="id">
+              <el-option v-for="item in cameraList" :key="item.id" :label="item.name" :value="item"></el-option>
             </el-select>
             <!-- <el-select v-if="shuifeiForm.productSfModels[0].type=='log'" v-model="shuifeiForm.arrA" multiple placeholder="请选择日志">
               <el-option v-for="item in logList" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -61,11 +61,11 @@
               <el-radio label="sxt">视频监控</el-radio>
               <el-radio label="log">日志</el-radio>
             </el-radio-group>
-            <el-select v-if="shuifeiForm.productSfModels[1].type=='sensor'" v-model="shuifeiForm.productSfModels[1].productSfModelDetails" multiple placeholder="请选择环境数据">
-              <el-option v-for="item in sensorList" :key="item.id" :label="item.device_name + ' - ' + item.name" :value="item.id"></el-option>
+            <el-select v-if="shuifeiForm.productSfModels[1].type=='sensor'" v-model="shuifeiForm.productSfModels[1].productSfModelDetails" multiple placeholder="请选择环境数据" value-key="id">
+              <el-option v-for="item in sensorList" :key="item.id" :label="item.device_name + ' - ' + item.name" :value="item"></el-option>
             </el-select>
-            <el-select v-if="shuifeiForm.productSfModels[1].type=='sxt'" v-model="shuifeiForm.productSfModels[1].productSfModelDetails" multiple placeholder="请选择摄像头">
-              <el-option v-for="item in cameraList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            <el-select v-if="shuifeiForm.productSfModels[1].type=='sxt'" v-model="shuifeiForm.productSfModels[1].productSfModelDetails" multiple placeholder="请选择摄像头" value-key="id">
+              <el-option v-for="item in cameraList" :key="item.id" :label="item.name" :value="item"></el-option>
             </el-select>
             <!-- <el-select v-if="shuifeiForm.productSfModels[1].type=='log'" v-model="shuifeiForm.arrB" multiple placeholder="请选择日志">
               <el-option v-for="item in logList" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -77,11 +77,11 @@
               <el-radio label="sxt">视频监控</el-radio>
               <el-radio label="log">日志</el-radio>
             </el-radio-group>
-            <el-select v-if="shuifeiForm.productSfModels[2].type=='sensor'" v-model="shuifeiForm.productSfModels[2].productSfModelDetails" multiple placeholder="请选择环境数据">
-              <el-option v-for="item in sensorList" :key="item.id" :label="item.device_name + ' - ' + item.name" :value="item.id"></el-option>
+            <el-select v-if="shuifeiForm.productSfModels[2].type=='sensor'" v-model="shuifeiForm.productSfModels[2].productSfModelDetails" multiple placeholder="请选择环境数据" value-key="id">
+              <el-option v-for="item in sensorList" :key="item.id" :label="item.device_name + ' - ' + item.name" :value="item"></el-option>
             </el-select>
-            <el-select v-if="shuifeiForm.productSfModels[2].type=='sxt'" v-model="shuifeiForm.productSfModels[2].productSfModelDetails" multiple placeholder="请选择摄像头">
-              <el-option v-for="item in cameraList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            <el-select v-if="shuifeiForm.productSfModels[2].type=='sxt'" v-model="shuifeiForm.productSfModels[2].productSfModelDetails" multiple placeholder="请选择摄像头" value-key="id">
+              <el-option v-for="item in cameraList" :key="item.id" :label="item.name" :value="item"></el-option>
             </el-select>
             <!-- <el-select v-if="shuifeiForm.productSfModels[2].type=='log'" v-model="shuifeiForm.arrC" multiple placeholder="请选择日志">
               <el-option v-for="item in logList" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -141,15 +141,28 @@
         </el-table-column>
       </el-table>
     </div>
+    <!-- 分页 -->
+    <div
+      class="pagination"
+      style="margin-top:10px"
+    >
+      <el-pagination
+        :current-page.sync="cur_page"
+        :total="totalNum"
+        background
+        layout="total, sizes,prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </el-card>
 </template>
 
 <script>
 import { deviceList } from '@/api/device'
 import { getSxtList } from '@/api/sxt'
-import { productSfList, getDetailById, productSfAddOrUpdate } from '@/api/shuifei'
+import { productSfList, getDetailById } from '@/api/shuifei'
 import { getToken } from '@/utils/auth'
-import qs from "qs";
 export default {
   created(){
     // 获取当前基地id
@@ -159,13 +172,16 @@ export default {
     // 获取当前基地摄像头，用于form表单
     this.getGetSxtList()
     // 获取当前基地水肥应用，用于table列表
-    this.getProductSfList()
+    this.getData()
   },
   data() {
     return {
       // 基地id
       bs_base_id: "",
-
+      // 分页相关
+      pageSize: 10,
+      totalNum: 0,
+      cur_page: 0,
       // 表单新增还是编辑
       operateType: "add",
       // 表单显示隐藏
@@ -324,23 +340,32 @@ export default {
         .catch(() => {})
     },
     // 获取水肥应用列表（主列表）
-    getProductSfList(){
-      const data = {
+    getData(){
+      const _params = {
         bs_base_id: this.bs_base_id,
-        page: 0,
-        size: 10
+        size: this.pageSize,
+        page: this.cur_page
       }
-      productSfList(data)
-        .then(res => {
-          if (res.code === 200) {
-            this.tableData = res.data.content
-            console.log(res)
-          } else {
-
-          }
-        })
-        .catch(() => {})
+      // if (this.is_search) {
+      //   if (this.s_name) {
+      //     _params.name = this.s_name
+      //   }
+      //   if (this.s_prod) {
+      //     _params.hd_product_name = this.s_prod
+      //   }
+      //   if (this.s_code) {
+      //     _params.function_code = this.s_code
+      //   }
+      // }
+      productSfList(_params).then(res => {
+        if (res.code === 200) {
+          this.tableData = res.data.content  
+          this.totalNum = res.data.totalElements
+          console.log(res)
+        }
+      })
     },
+
     // table列表显示传感器的值，排除掉摄像头
     sensorData(row){
       let sensorArr = [];
@@ -363,14 +388,6 @@ export default {
     },
     //获取环境数据数组列表(根据采集设备选中的值，用于第二步)
     getSensorList(val){
-      // this.envList = []
-      // for(let i=0;i<=val.length-1;i++){
-      //   this.pickEquipmentList.find((item)=>{
-      //     if(item.id == val[i]){
-      //       this.envList.push(item)
-      //     }
-      //   });
-      // }
       this.sensorList = []
       if(val){
         for(let i=0;i<val.length;i++){
@@ -435,32 +452,35 @@ export default {
         if (!valdid) {
           return
         }
+        // 所需传入的传感器设备
         let needSensor = (this.shuifeiForm.pickEquipment).concat(this.shuifeiForm.sxtCheckList)
         let productSfModels = this.shuifeiForm.productSfModels
+        // 构建所需提交的表单
         let formData = new FormData()
         formData.append('name', this.shuifeiForm.name)
         formData.append('hd_device_id', this.shuifeiForm.hd_device_id)
         needSensor.forEach((value, index) => {
           formData.append(`productSfDevices[${index}]`, value)
         })
-        // productSfModels.forEach((value, index) => {
-        //   // formData.append(`productSfModels[${index}].type`, value.type);
-        //   productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
-        //     formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_id`, value2.hd_device_id)
-        //     formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_sensor_id`, value2.hd_device_sensor_id)
-        //     formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].id`, value2.id)
-        //   })
-        //   // formData.append(`productSfModels[${index}].productSfModelDetails`, value.productSfModelDetails)
-        // })
-        // let formData = {
-        //   name: this.shuifeiForm.name,
-        //   hd_device_id: this.shuifeiForm.hd_device_id,
-        //   // productSfDevices: (this.shuifeiForm.pickEquipment).concat(this.shuifeiForm.sxtCheckList),
-        //   // productSfModels: this.shuifeiForm.productSfModels
-        // }
-        console.log(formData)
-        // let formData2 = qs.stringify()
-        // console.log(formData2)
+        productSfModels.forEach((value, index) => {
+          formData.append(`productSfModels[${index}].type`, value.type);
+          if(value.type == 'sxt'){
+            productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
+              console.log(value2)
+              formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_id`, value2.id)
+            })
+          }
+          if(value.type == 'sensor'){
+            productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
+              formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_sensor_id`, value2.hd_device_sensor_id)
+              formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].type`, 'chart')
+            })
+          }
+          productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
+            formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].type`, 'chart')
+          })
+
+        })
         
         const config = {
           headers: { 'Content-Type': 'application/form-data', 'Authorization': 'Bearer ' + getToken() }
@@ -517,6 +537,17 @@ export default {
     },
     // 编辑按钮
     // 删除按钮
+
+    handleSizeChange: function (pageSize) {
+      // 每页条数切换
+      this.pageSize = pageSize
+      this.handleCurrentChange(this.cur_page)
+    },
+    // 分页导航
+    handleCurrentChange (val) {
+      this.cur_page = val
+      this.getData()
+    },
   },
 };
 </script>
