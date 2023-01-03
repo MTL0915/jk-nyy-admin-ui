@@ -16,10 +16,27 @@ export function getDetailById(data) {
     params: data
   });
 }
+// 水肥应用根据id删除
+export function deleteById(data) {
+  return request({
+    url: "/hd/hd_product_sf/deleteProductSf",
+    method: "get",
+    params: data
+  });
+}
 //水肥应用根据id获取详情
 export function productSfDetail(data) {
   return request({
     url: "/hd/hd_product_sf/productSfDetail",
+    method: "get",
+    params: data
+  });
+}
+
+//根据基地id主设备id获取日志
+export function deviceRunLogList(data) {
+  return request({
+    url: "/hd/device/deviceRunLogList",
     method: "get",
     params: data
   });

@@ -2,9 +2,9 @@
   <div>
     <!-- 新增弹出框 -->
     <el-dialog
-      :title='水肥应用系统新增'
+      :title='title'
       :visible.sync="dialogVisible"
-      width="550px"
+      width="750px"
     >
       <!-- 步骤条 -->
       <el-steps :active="active" finish-status="success" space="50%" align-center="true" style="margin-bottom:20px">
@@ -22,20 +22,31 @@
               <el-option v-for="item in $parent.hd_device_idListArr" :key="item.id" :label="item.name + ' ' + item.device_id" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="采集设备" prop="pickEquipment">
-            <el-select v-model="shuifeiForm.pickEquipment" multiple placeholder="请选择采集设备" @change="getSensorList">
-              <el-option v-for="item in $parent.selectSensorListArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          <el-form-item label="副设备" prop="vice_hd_device_id">
+            <el-select v-model="shuifeiForm.vice_hd_device_id" placeholder="请选择副设备" @change="selectHd_device_id">
+              <el-option v-for="item in $parent.vice_hd_device_idListArr" :key="item.id" :label="item.name + ' ' + item.device_id" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="摄像头" prop="sxtCheckList">
-            <el-select v-model="shuifeiForm.sxtCheckList" multiple placeholder="请选择摄像头" @change="getCameraList">
+          <el-form-item label="采集设备" prop="pickEquipment">
+            <!-- <el-select v-model="shuifeiForm.pickEquipment" multiple placeholder="请选择采集设备" @change="getSensorList">
+              <el-option v-for="item in $parent.selectSensorListArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select> -->
+            <el-checkbox-group v-model="shuifeiForm.pickEquipment" size="small" @change="getSensorList" style="border: 1px solid #DCDFE6;border-radius: 4px;padding-top: 5px;">
+              <el-checkbox border v-for="item in $parent.selectSensorListArr" :key="item.id" :label="item.name + ' ' + item.device_id" @change="chooseSensorItem($event, item.id)"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="摄像头" prop="pickSxt">
+            <!-- <el-select v-model="shuifeiForm.pickSxt" multiple placeholder="请选择摄像头" @change="getSxtList">
               <el-option
                 v-for="item in $parent.selectSxtListArr"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id">
               </el-option>
-            </el-select>
+            </el-select> -->
+            <el-checkbox-group v-model="shuifeiForm.pickSxt" size="small" @change="getSxtList" style="border: 1px solid #DCDFE6;border-radius: 4px;padding-top: 5px;">
+              <el-checkbox border v-for="item in $parent.selectSxtListArr" :key="item.id" :label="item.name" @change="chooseSxtItem($event, item.id)"></el-checkbox>
+            </el-checkbox-group>
           </el-form-item>
         </div>
         <div v-show="active == 1">
@@ -108,11 +119,13 @@ export default {
   data () {
     return {
       dialogVisible: false,
+      title:"新增水肥系统",
       // 表单默认展示第一步
 		  active: 0,
       shuifeiForm: {
         name: '',
         hd_device_id: "",
+        vice_hd_device_id: "",
         pickEquipment: [],
         pickSxt: [],
         productSfDevices: [],
@@ -133,8 +146,10 @@ export default {
       },
       // 存储第一步的采集设备数据，第二步
       needSensorListArr: [],
+      needSensorId: [],
       // 存储第一步的摄像头数据，第二步
       needSxtListArr: [],
+      needSxtId: [],
       // 表单规则
       rules: {
         name: [
@@ -183,6 +198,7 @@ export default {
       this.shuifeiForm = {
         name: '',
         hd_device_id: "",
+        vice_hd_device_id: "",
         pickEquipment: [],
         pickSxt: [],
         productSfDevices: [],
@@ -202,34 +218,74 @@ export default {
         ],
       }
       this.dialogVisible = true
+      this.needSensorId = []
     },
     //获取环境数据数组列表(根据采集设备选中的值，用于第二步)
-    getSensorList(val){
+    // getSensorList(val){
+    //   this.needSensorListArr = []
+    //   if(val){
+    //     for(let i=0;i<val.length;i++){
+    //       let data = {
+    //         hd_device_id: val[i],
+    //       }
+    //       getDetailById(data)
+    //         .then(res => {
+    //           if (res.code === 200) {
+    //             this.needSensorListArr.push.apply(this.needSensorListArr, res.data.sensor);
+    //             console.log(this.needSensorListArr)
+    //           }
+    //         })
+    //     }
+    //   }
+    // },
+    chooseSensorItem(event,id){
       this.needSensorListArr = []
-      if(val){
-        for(let i=0;i<val.length;i++){
-          let data = {
-            hd_device_id: val[i],
-          }
-          getDetailById(data)
-            .then(res => {
-              if (res.code === 200) {
-                this.needSensorListArr.push.apply(this.needSensorListArr, res.data.sensor);
-                console.log(this.needSensorListArr)
-              } else {
-
-              }
-            })
-            .catch(() => {})
+      // 如果是选中
+      if (event) {
+        // 把选中的id存入数组
+        this.needSensorId.push(id);
+      } else {
+        //如果是取消选中则从数组中删除该id
+        this.needSensorId.splice(this.needSensorId.indexOf(id), 1);
+      }
+      for(let i=0;i<this.needSensorId.length;i++){
+        let data = {
+          hd_device_id: this.needSensorId[i],
         }
+        getDetailById(data)
+          .then(res => {
+            if (res.code === 200) {
+              this.needSensorListArr.push.apply(this.needSensorListArr, res.data.sensor);
+              console.log(this.needSensorListArr)
+            }
+          })
       }
     },
     //获取视频监控数组列表(根据摄像头选中的值，用于第二步)
-    getCameraList(val){
+    // getSxtList(val){
+    //   this.needSxtListArr = []
+    //   for(let i=0;i<=val.length-1;i++){
+    //     this.$parent.selectSxtListArr.find((item)=>{
+    //       if(item.id == val[i]){
+    //         this.needSxtListArr.push(item)
+    //         console.log(this.needSxtListArr)
+    //       }
+    //     });
+    //   }
+    // },
+    chooseSxtItem(event,id){
       this.needSxtListArr = []
-      for(let i=0;i<=val.length-1;i++){
+      // 如果是选中
+      if (event) {
+        // 把选中的id存入数组
+        this.needSxtId.push(id);
+      } else {
+        //如果是取消选中则从数组中删除该id
+        this.needSxtId.splice(this.needSxtId.indexOf(id), 1);
+      }
+      for(let i=0;i<this.needSxtId.length;i++){
         this.$parent.selectSxtListArr.find((item)=>{
-          if(item.id == val[i]){
+          if(item.id == this.needSxtId[i]){
             this.needSxtListArr.push(item)
             console.log(this.needSxtListArr)
           }
@@ -270,12 +326,13 @@ export default {
           return
         }
         // 所需传入的传感器设备
-        let needSensor = (this.shuifeiForm.pickEquipment).concat(this.shuifeiForm.pickSxt)
+        let needSensor = (this.needSensorId).concat(this.needSxtId)
         let productSfModels = this.shuifeiForm.productSfModels
         // 构建所需提交的表单
         let formData = new FormData()
         formData.append('name', this.shuifeiForm.name)
         formData.append('hd_device_id', this.shuifeiForm.hd_device_id)
+        formData.append('vice_hd_device_id', this.shuifeiForm.vice_hd_device_id)
         needSensor.forEach((value, index) => {
           formData.append(`productSfDevices[${index}]`, value)
         })
@@ -283,7 +340,6 @@ export default {
           formData.append(`productSfModels[${index}].type`, value.type);
           if(value.type == 'sxt'){
             productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
-              console.log(value2)
               formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_id`, value2.id)
             })
           }
@@ -306,6 +362,7 @@ export default {
           if (res.data.code === 200) {
             this.$message.success(res.data.msg)
             console.log('提交成功')
+            this.$parent.getData()
           } else {
             this.$message.error(res.data.msg)
             console.log(res)
@@ -321,5 +378,10 @@ export default {
 </script>
 
 <style scoped>
-
+::v-deep .el-checkbox.is-bordered.el-checkbox--small{
+  margin-left: 10px;
+}
+::v-deep .el-select{
+  display: block;
+}
 </style>

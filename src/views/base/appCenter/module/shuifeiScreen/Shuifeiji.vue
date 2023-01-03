@@ -1,18 +1,19 @@
 <template>
   <div class="shuifeiji-bg">
-    <headerNav></headerNav>
+    <headerNav :value="$route.query.id"></headerNav>
     <!-- <div class="shuifeiji-box"> -->
       <draggable class="shuifeiji-box" chosenClass="chosen" forceFallback="true" group="big" animation="1000">
         <div class="shuifeiji">
           <div class="shuifeiji-left">
             <bgLeft></bgLeft>
+            <!-- <bgLeft2></bgLeft2> -->
           </div>
           <div class="shuifeiji-right">
             <bgRight></bgRight>
           </div>
         </div>
         <div class="showList">
-          <showList></showList>
+          <showList :allData="allData"></showList>
         </div>
       </draggable>
     <!-- </div> -->
@@ -30,44 +31,38 @@ import { getShuifeiData } from "@/api/getShuifeiData";
 import draggable from 'vuedraggable'
 
 import bgLeft from "./pipe/bgLeft.vue";
+import bgLeft2 from "./pipe2/bgLeft.vue";
 import bgRight from "./pipe/bgRight.vue";
 import showList from "./showList";
 import headerNav from "./Header.vue"
+import { productSfDetail } from '@/api/shuifei'
 export default {
   data() {
-    return {};
+    return {
+      // 基地id
+      bs_base_id:'',
+      // 根据水肥应用的id获取的详细信息
+      allData:"",
+      // 主设备的设备
+      PKid1:"",
+      // 副设备的设备
+      PKid2:"",
+      // 主设备的传感器
+      PCid:""
+    };
   },
   components: {
     bgLeft,
+    bgLeft2,
     bgRight,
     showList,
     headerNav,
     draggable,
   },
-  methods: {
-    getWebsocketInfo(data) {
-      // console.log("WebSocket" + "上报了");
-      if (data.device_id == "PK01B-2111020" && data.channelValue != null) {
-        this.$store.commit("SET_EQUIPMENT_DATA", {pkArr02:data.sensorInfos});
-        this.$store.commit("INIT_CODE", {pkArr02:data.sensorInfos});
-        // console.log(data.sensorInfos);
-        console.log("2111020装置设备上报");
-      }
-      if (data.device_id == "PK01B-2110019" && data.channelValue != null) {
-        this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:data.sensorInfos});
-        this.$store.commit("INIT_CODE", {pkArr01:data.sensorInfos});
-        // console.log(data.sensorInfos);
-        console.log("2110019装置设备上报");
-      }
-      if (data.device_id == "PC01B-2110019") {
-        this.$store.commit("SET_SENSOR_DATA", data.sensorInfos);
-        // console.log(data.sensorInfos);
-        console.log("2110019传感器上报");
-      }
-    },
-  },
   created() {
-    console.log(JSON.parse(this.$route.query.row))
+    // console.log(this.$route.query.id)
+    this.getProductSfDetail()
+    this.bs_base_id = this.$route.query.bs_base_id
     // axios获取token
     // const data = {
     //   expires_in: 0,
@@ -79,25 +74,22 @@ export default {
     // });
 
     // axios获取设备
-    // const PKid1 = "PK01B-2110019";
-    // const PKid2 = "PK01B-2111020";
-    const PKid1 = JSON.parse(this.$route.query.row).firstEquipmentPK;
-    const PKid2 = JSON.parse(this.$route.query.row).secondEquipment;
+    const PKid1 = "PK01B-2110019";
+    const PKid2 = "PK01B-2111020";
     // axios获取传感器
-    // const PCid = "PC01B-2110019";
-    const PCid = JSON.parse(this.$route.query.row).firstEquipmentPC;
+    const PCid = "PC01B-2110019";
 
-    Promise.all([getShuifeiData(PKid1), getShuifeiData(PKid2), getShuifeiData(PCid)]).then(([res1,res2,res3]) => {
-      this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
-      this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
-      this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
-    });
+    // Promise.all([getShuifeiData(PKid1), getShuifeiData(PKid2), getShuifeiData(PCid)]).then(([res1,res2,res3]) => {
+    //   this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+    //   this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+    //   this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
+    // });
 
 
     // websocket相关
-    if (Vue.prototype.$ws) {
-      return;
-    }
+    // if (Vue.prototype.$ws) {
+    //   return;
+    // }
     console.log("水肥建立socket连接");
     let ws = new MyWebSocket(process.env.WEBSOCKET_URL, getToken());
     // let ws = new MyWebSocket(
@@ -117,6 +109,50 @@ export default {
     this.$ws.deviceInfoUpload = this.getWebsocketInfo;
 
   },
+  methods: {
+    getProductSfDetail(){
+      const data = {
+        id: this.$route.query.id,
+      }
+      productSfDetail(data)
+        .then(res => {
+          if (res.code === 200) {
+            this.allData = res.data
+            console.log(this.allData)
+            this.PKid1 = this.allData.hd_device_childs[1].device_id
+            this.PKid2 = this.allData.vice_device_id
+            this.PCid = this.allData.hd_device_childs[0].device_id
+            Promise.all([getShuifeiData(this.PKid1), getShuifeiData(this.PKid2), getShuifeiData(this.PCid)]).then(([res1,res2,res3]) => {
+              this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+              this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+              this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
+            });
+          }
+        })
+    },
+
+    getWebsocketInfo(data) {
+      // console.log("WebSocket" + "上报了");
+      if (data.device_id == this.PKid2 && data.channelValue != null) {
+        this.$store.commit("SET_EQUIPMENT_DATA", {pkArr02:data.sensorInfos});
+        this.$store.commit("INIT_CODE", {pkArr02:data.sensorInfos});
+        // console.log(data.sensorInfos);
+        console.log(this.PKid2 + "装置设备上报");
+      }
+      if (data.device_id == this.PKid1 && data.channelValue != null) {
+        this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:data.sensorInfos});
+        this.$store.commit("INIT_CODE", {pkArr01:data.sensorInfos});
+        // console.log(data.sensorInfos);
+        console.log(this.PKid1 + "装置设备上报");
+      }
+      if (data.device_id == this.PCid) {
+        this.$store.commit("SET_SENSOR_DATA", data.sensorInfos);
+        // console.log(data.sensorInfos);
+        console.log(this.PCid + "传感器上报");
+      }
+    },
+  },
+
 };
 </script>
 

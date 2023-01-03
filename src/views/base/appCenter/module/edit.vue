@@ -27,8 +27,8 @@
               <el-option v-for="item in $parent.selectSensorListArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="摄像头" prop="sxtCheckList">
-            <el-select v-model="shuifeiForm.sxtCheckList" multiple placeholder="请选择摄像头" @change="getCameraList">
+          <el-form-item label="摄像头" prop="pickSxt">
+            <el-select v-model="shuifeiForm.pickSxt" multiple placeholder="请选择摄像头" @change="getCameraList">
               <el-option
                 v-for="item in $parent.selectSxtListArr"
                 :key="item.id"
@@ -113,7 +113,7 @@ export default {
         name: '',
         hd_device_id: "",
         pickEquipment: [],
-        sxtCheckList: [],
+        pickSxt: [],
         productSfDevices: [],
         productSfModels: [
           {
@@ -186,7 +186,7 @@ export default {
         name: item.name,
         hd_device_id: item.hd_device_id,
         pickEquipment: [],
-        sxtCheckList: [],
+        pickSxt: [],
         productSfDevices: [],
         productSfModels: [
           {

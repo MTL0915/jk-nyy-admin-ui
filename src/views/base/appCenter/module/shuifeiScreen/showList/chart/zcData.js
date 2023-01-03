@@ -115,40 +115,40 @@ export function loadChartZ(myChart, resultArr, nyear, datas, czUnit) {
           },
         },
       },
-      {
-        type: "value",
-        name: "单位：（吨）",
-        splitLine: {
-          lineStyle: {
-            //grid 区域内横坐标的线样式 此时为虚线
-            type: "dashed",
-            color: "#276796",
-          },
-        },
-        axisTick: {
-          //坐标轴刻度相关设置。
-          show: false,
-        },
-        axisLabel: {
-          //坐标轴刻度标签的相关设置。
-          interval: 1, //设置为 1，表示『隔一个标签显示一个标签』
-          //	margin:15,
-          textStyle: {
-            color: "#fff",
-            fontStyle: "normal",
-            fontFamily: "微软雅黑",
-            fontSize: 14,
-          },
-          formatter: "{value}",
-          //rotate:50,
-        },
-        axisLine: {
-          show: false,
-          lineStyle: {
-            color: "#fff",
-          },
-        },
-      },
+      // {
+      //   type: "value",
+      //   name: "单位：m/s",
+      //   splitLine: {
+      //     lineStyle: {
+      //       //grid 区域内横坐标的线样式 此时为虚线
+      //       type: "dashed",
+      //       color: "#276796",
+      //     },
+      //   },
+      //   axisTick: {
+      //     //坐标轴刻度相关设置。
+      //     show: false,
+      //   },
+      //   axisLabel: {
+      //     //坐标轴刻度标签的相关设置。
+      //     interval: 1, //设置为 1，表示『隔一个标签显示一个标签』
+      //     //	margin:15,
+      //     textStyle: {
+      //       color: "#fff",
+      //       fontStyle: "normal",
+      //       fontFamily: "微软雅黑",
+      //       fontSize: 14,
+      //     },
+      //     formatter: "{value}",
+      //     //rotate:50,
+      //   },
+      //   axisLine: {
+      //     show: false,
+      //     lineStyle: {
+      //       color: "#fff",
+      //     },
+      //   },
+      // },
     ],
     series: [
       {
@@ -162,10 +162,10 @@ export function loadChartZ(myChart, resultArr, nyear, datas, czUnit) {
         smooth: true,
         itemStyle: {
           normal: {
-            color: "#63E09E",
+            color: "#78f7f7",
             //交叉点的阴影样式
             lineStyle: {
-              color: "#63E09E",
+              color: "#78f7f7",
               width: 3,
             },
             areaStyle: {
@@ -187,36 +187,36 @@ export function loadChartZ(myChart, resultArr, nyear, datas, czUnit) {
         symbolSize: 5, //数据交叉点尺寸
         data: datas[0]["datas"],
       },
-      {
-        name: resultArr[1],
-        type: "bar",
-        barWidth: 20,
-        yAxisIndex: 1,
-        tooltip: {
-          valueFormatter: function(value) {
-            return value + "亩";
-          },
-        },
-        smooth: true,
-        itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "#DC8E53" },
-            { offset: 0.5, color: "#DC8E53" },
-            { offset: 1, color: "#A35049" },
-          ]),
-        },
-        emphasis: {
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: "#DC8E53" },
-              { offset: 0.5, color: "#DC8E53" },
-              { offset: 1, color: "#A35049" },
-            ]),
-          },
-        },
-        // data: fData,
-        data: datas[1]["datas"],
-      },
+      // {
+      //   name: resultArr[1],
+      //   type: "bar",
+      //   barWidth: 20,
+      //   yAxisIndex: 1,
+      //   tooltip: {
+      //     valueFormatter: function(value) {
+      //       return value + "亩";
+      //     },
+      //   },
+      //   smooth: true,
+      //   itemStyle: {
+      //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      //       { offset: 0, color: "#DC8E53" },
+      //       { offset: 0.5, color: "#DC8E53" },
+      //       { offset: 1, color: "#A35049" },
+      //     ]),
+      //   },
+      //   emphasis: {
+      //     itemStyle: {
+      //       color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      //         { offset: 0, color: "#DC8E53" },
+      //         { offset: 0.5, color: "#DC8E53" },
+      //         { offset: 1, color: "#A35049" },
+      //       ]),
+      //     },
+      //   },
+      //   // data: fData,
+      //   data: datas[1]["datas"],
+      // },
     ],
   });
 }
