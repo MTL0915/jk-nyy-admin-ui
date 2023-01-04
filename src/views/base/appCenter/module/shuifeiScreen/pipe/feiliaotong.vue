@@ -304,7 +304,6 @@ export default {
   },
   watch: {
     shebeiArr(shebeiArr) {
-      console.log(shebeiArr,987654)
       // 过滤出注水阀的数组
       var zhushuifaArr = [];
       for (var i = 0; i < shebeiArr.length; i++) {
@@ -391,7 +390,6 @@ export default {
     },
 
     chuanganqiArr(chuanganqiArr) {
-      console.log(chuanganqiArr,123456789);
       // 过滤出肥桶容量
       var rongliangArr = [];
       for (var i = 0; i < chuanganqiArr.length; i++) {
@@ -419,7 +417,6 @@ export default {
       this.potsArr = this.potsBtn.map((item, index) => {
         return { ...item, ...this.potsData[index] };
       });
-      console.log(this.potsArr,99996666);
     },
     potsArr() {
       this.loading = false

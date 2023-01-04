@@ -35,7 +35,7 @@ import bgLeft2 from "./pipe2/bgLeft.vue";
 import bgRight from "./pipe/bgRight.vue";
 import showList from "./showList";
 import headerNav from "./Header.vue"
-import { productSfDetail } from '@/api/shuifei'
+import { productSfDetail, deviceList } from '@/api/shuifei'
 export default {
   data() {
     return {
@@ -119,6 +119,10 @@ export default {
           if (res.code === 200) {
             this.allData = res.data
             console.log(this.allData)
+            // const vice_data = {
+            //   bs_base_id: this.$route.query.bs_base_id,
+            //   hd_device_parent_id: res.data.vice_hd_device_id
+            // }
             this.PKid1 = this.allData.hd_device_childs[1].device_id
             this.PKid2 = this.allData.vice_device_id
             this.PCid = this.allData.hd_device_childs[0].device_id

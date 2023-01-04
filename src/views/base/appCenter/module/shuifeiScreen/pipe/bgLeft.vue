@@ -90,7 +90,7 @@ export default {
 .jiayashifeibengComponent {
   position: absolute;
   top: 290px;
-  left: 1011px;
+  left: 1002px;
   z-index: 2;
 }
 .famenComponent {

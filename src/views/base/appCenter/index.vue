@@ -197,7 +197,7 @@ export default {
             }
             // 副设备：过滤出副设备的SF与FM
             for(let i=0;i<this.deviceListArr.length;i++){
-              if(this.deviceListArr[i].device_id.substr(0, 2) == ('PK')){
+              if(this.deviceListArr[i].device_id.substr(0, 2) == ('GK')){
                 this.vice_hd_device_idListArr.push(this.deviceListArr[i])
               }
             }

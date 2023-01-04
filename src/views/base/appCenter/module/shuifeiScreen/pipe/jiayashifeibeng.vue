@@ -91,7 +91,7 @@ export default {
 .jiayashifeibeng {
   display: flex;
   justify-content: space-between;
-  width: 123px;
+  width: 150px;
   height: 103px;
 }
 .jiayashifeibeng .device-name {

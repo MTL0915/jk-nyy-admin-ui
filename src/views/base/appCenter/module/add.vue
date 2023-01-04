@@ -346,11 +346,11 @@ export default {
           if(value.type == 'sensor'){
             productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
               formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_sensor_id`, value2.hd_device_sensor_id)
-              formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].type`, 'chart')
+              // formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].type`, 'chart')
             })
           }
           productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
-            formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].type`, 'chart')
+            formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].type`, 'undefined')
           })
 
         })

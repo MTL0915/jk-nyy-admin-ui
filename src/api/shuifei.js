@@ -42,5 +42,14 @@ export function deviceRunLogList(data) {
   });
 }
 
+//根据id获取旗下关联的设备
+export function deviceList(data) {
+  return request({
+    url: "/hd/hd_device/deviceList",
+    method: "get",
+    params: data
+  });
+}
+
 
 
