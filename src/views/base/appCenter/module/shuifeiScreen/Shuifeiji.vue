@@ -5,8 +5,8 @@
       <draggable class="shuifeiji-box" chosenClass="chosen" forceFallback="true" group="big" animation="1000">
         <div class="shuifeiji">
           <div class="shuifeiji-left">
-            <bgLeft></bgLeft>
-            <!-- <bgLeft2></bgLeft2> -->
+            <!-- <bgLeft></bgLeft> -->
+            <bgLeft2></bgLeft2>
           </div>
           <div class="shuifeiji-right">
             <bgRight></bgRight>
@@ -118,7 +118,7 @@ export default {
         .then(res => {
           if (res.code === 200) {
             this.allData = res.data
-            console.log(this.allData)
+            console.log(this.allData,4444)
             // const vice_data = {
             //   bs_base_id: this.$route.query.bs_base_id,
             //   hd_device_parent_id: res.data.vice_hd_device_id

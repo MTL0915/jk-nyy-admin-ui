@@ -1,6 +1,6 @@
 <template>
   <div class="ph">
-    <div class="device-name">PH传感器</div>
+    <div class="device-name">pH传感器</div>
     <div class="device-bg">
       <span class="device-data">{{ PHValue }}</span>
     </div>

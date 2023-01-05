@@ -1,12 +1,18 @@
 <template>
   <div class="bg-left">
-    <!-- <feiliaotong class="feiliaotongComponent"></feiliaotong> -->
+    <feiliaotong class="feiliaotongComponent"></feiliaotong>
     <zengyabeng class="zengyabengComponent"></zengyabeng>
     <guolvqi class="guolvqiComponent"></guolvqi>
     <diepianguolvqi class="diepianguolvqiComponent"></diepianguolvqi>
     <tiaojiefa class="tiaojiefaComponent"></tiaojiefa>
     <PH class="phComponent"></PH>
     <EC class="ecComponent"></EC>
+    <PH2 class="phComponent2"></PH2>
+    <EC2 class="ecComponent2"></EC2>
+    <zengyabeng2 class="zengyabengComponent2"></zengyabeng2>
+    <kongzhitai class="kongzhitai"></kongzhitai>
+    <liuliangji class="liuliangjiComponent"></liuliangji>
+    <shuiliu class="shuiliuComponent"></shuiliu> 
     <!-- <jinshuifa class="jinshuifaComponent"></jinshuifa>
     <tiaojiefa class="tiaojiefaComponent"></tiaojiefa>
     <jiayashifeibeng class="jiayashifeibengComponent"></jiayashifeibeng>
@@ -21,23 +27,28 @@
 </template>
 
 <script>
-// import feiliaotong from "./feiliaotong.vue";
+import feiliaotong from "./feiliaotong.vue";
 import zengyabeng from "./zengyabeng.vue";
 import guolvqi from "./guolvqi.vue";
 import diepianguolvqi from "./diepianguolvqi.vue";
 import tiaojiefa from "./tiaojiefa.vue";
 import PH from "./PH.vue";
 import EC from "./EC.vue";
+import PH2 from "./PH.vue";
+import EC2 from "./EC.vue";
+import zengyabeng2 from "./zengyabeng.vue";
+import kongzhitai from "./kongzhitai.vue";
+import liuliangji from "./liuliangji.vue";
+import shuiliu from "./shuiliu.vue";
 // import jinshuifa from "./jinshuifa.vue";
 // import jiayashifeibeng from "./jiayashifeibeng.vue";
 // import famen from "./famen.vue";
 
 // import yalichuanganqi from "./yalichuanganqi.vue";
-// import liuliangji from "./liuliangji.vue";
-// import shuiliu from "./shuiliu.vue";
+
 export default {
   components: {
-    // feiliaotong,
+    feiliaotong,
     zengyabeng,
     guolvqi,
     diepianguolvqi,
@@ -47,10 +58,14 @@ export default {
     // famen,
     PH,
     EC,
+    PH2,
+    EC2,
+    zengyabeng2,
+    kongzhitai,
+    liuliangji,
     // yalichuanganqi,
-    // liuliangji,
     // diepianguolvqi,
-    // shuiliu,
+    shuiliu,
   },
 };
 </script>
@@ -65,8 +80,8 @@ export default {
 }
 .feiliaotongComponent {
   position: absolute;
-  top: -115px;
-  left: 140px;
+  top: -216px;
+  left: 30px;
   z-index: 2;
 }
 .zengyabengComponent {
@@ -93,6 +108,49 @@ export default {
   left: 610px;
   z-index: 2;
 }
+.phComponent {
+  position: absolute;
+  top: 321px;
+  left: 880px;
+  z-index: 2;
+}
+.ecComponent {
+  position: absolute;
+  top: 321px;
+  left: 990px;
+  z-index: 2;
+}
+.phComponent2 {
+  position: absolute;
+  top: 457px;
+  left: 880px;
+  z-index: 2;
+}
+.ecComponent2 {
+  position: absolute;
+  top: 457px;
+  left: 990px;
+  z-index: 2;
+}
+.zengyabengComponent2 {
+  position: absolute;
+  top: 700px;
+  left: 846px;
+  z-index: 2;
+  transform: rotate(-90deg);
+}
+.kongzhitai {
+  position: absolute;
+  top: 672px;
+  left: 975px;
+  z-index: 2;
+}
+.liuliangjiComponent {
+  position: absolute;
+  top: 695px;
+  left: 1200px;
+  z-index: 2;
+}
 .jinshuifaComponent {
   position: absolute;
   top: 675px;
@@ -111,28 +169,11 @@ export default {
   left: 1002px;
   z-index: 2;
 }
-.phComponent {
-  position: absolute;
-  top: 695px;
-  left: 730px;
-  z-index: 2;
-}
-.ecComponent {
-  position: absolute;
-  top: 695px;
-  left: 830px;
-  z-index: 2;
-}
+
 .yalichuanganqiComponent {
   position: absolute;
   top: 695px;
   left: 930px;
-  z-index: 2;
-}
-.liuliangjiComponent {
-  position: absolute;
-  top: 695px;
-  left: 1030px;
   z-index: 2;
 }
 
