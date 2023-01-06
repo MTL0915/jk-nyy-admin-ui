@@ -72,8 +72,8 @@
 <script>
 import { openOrCloseChannel } from "@/utils/websocket_util.js";
 import loading from "../loading";
-import water04 from "../water/water04.vue";
-import water05 from "../water/water05.vue";
+import water04 from "../water2/water04.vue";
+import water05 from "../water2/water05.vue";
 export default {
   data() {
     return {

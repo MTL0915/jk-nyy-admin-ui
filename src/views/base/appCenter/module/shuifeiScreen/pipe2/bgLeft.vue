@@ -11,6 +11,8 @@
     <EC2 class="ecComponent2"></EC2>
     <zengyabeng2 class="zengyabengComponent2"></zengyabeng2>
     <kongzhitai class="kongzhitai"></kongzhitai>
+    <hunhetong class="hunhetong"></hunhetong>
+    <guangzhao class="guangzhao"></guangzhao>
     <liuliangji class="liuliangjiComponent"></liuliangji>
     <shuiliu class="shuiliuComponent"></shuiliu> 
     <!-- <jinshuifa class="jinshuifaComponent"></jinshuifa>
@@ -36,8 +38,10 @@ import PH from "./PH.vue";
 import EC from "./EC.vue";
 import PH2 from "./PH.vue";
 import EC2 from "./EC.vue";
-import zengyabeng2 from "./zengyabeng.vue";
+import zengyabeng2 from "./zengyabeng2.vue";
 import kongzhitai from "./kongzhitai.vue";
+import hunhetong from "./hunhetong.vue";
+import guangzhao from "./guangzhao.vue";
 import liuliangji from "./liuliangji.vue";
 import shuiliu from "./shuiliu.vue";
 // import jinshuifa from "./jinshuifa.vue";
@@ -62,6 +66,8 @@ export default {
     EC2,
     zengyabeng2,
     kongzhitai,
+    hunhetong,
+    guangzhao,
     liuliangji,
     // yalichuanganqi,
     // diepianguolvqi,
@@ -134,15 +140,26 @@ export default {
 }
 .zengyabengComponent2 {
   position: absolute;
-  top: 700px;
-  left: 846px;
+  top: 660px;
+  left: 905px;
   z-index: 2;
-  transform: rotate(-90deg);
 }
 .kongzhitai {
   position: absolute;
   top: 672px;
   left: 975px;
+  z-index: 2;
+}
+.hunhetong {
+  position: absolute;
+  top: 644px;
+  left: 784px;
+  z-index: 2;
+}
+.guangzhao {
+  position: absolute;
+  top: -110px;
+  left: 984px;
   z-index: 2;
 }
 .liuliangjiComponent {

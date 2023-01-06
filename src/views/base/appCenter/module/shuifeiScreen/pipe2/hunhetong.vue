@@ -1,6 +1,6 @@
 <template>
-  <div class="tiaojiefa">
-    <div class="device-name">调节阀</div>
+  <div class="hunhetong">
+    <div class="device-name">混合桶</div>
     <div class="device-bg"></div>
   </div>
 </template>
@@ -16,21 +16,21 @@ export default {
 </script>
 
 <style scoped>
-.tiaojiefa {
+.hunhetong {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 74px;
-  height: 77px;
+  width: 107px;
+  height: 164px;
 }
-.tiaojiefa .device-name {
+.hunhetong .device-name {
   text-align: center;
 }
-.tiaojiefa .device-bg {
-  background: url(~@/assets/images/shuifeiji/调节阀.png) no-repeat;
+.hunhetong .device-bg {
+  background: url(~@/assets/images/shuifeiji/混合桶.png) no-repeat;
   background-size: 100% 100%;
-  width: 74px;
-  height: 57px;
+  width: 107px;
+  height: 144px;
   position: relative;
 }
 </style>

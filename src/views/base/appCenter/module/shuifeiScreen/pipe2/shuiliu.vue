@@ -4,15 +4,19 @@
     <water01 class="water water01" where="41"></water01>
     <water02 class="water water02" where="41"></water02>
     <water03 class="water water03" where="41,45"></water03>
+    <water06 class="water water06" where="41"></water06>
+    <water07 class="water water07" where="41"></water07>
     <water19 class="water water19" where="41"></water19>
   </div>
 </template>
 
 <script>
-import water01 from "../water/water01.vue";
-import water02 from "../water/water02.vue";
-import water03 from "../water/water03.vue";
-import water19 from "../water/water19.vue";
+import water01 from "../water2/water01.vue";
+import water02 from "../water2/water02.vue";
+import water03 from "../water2/water03.vue";
+import water06 from "../water2/water06.vue";
+import water07 from "../water2/water07.vue";
+import water19 from "../water2/water19.vue";
 export default {
   mounted() {
     // 一开始先触发
@@ -30,6 +34,8 @@ export default {
     water01,
     water02,
     water03,
+    water06,
+    water07,
     water19,
   },
   methods: {
@@ -92,7 +98,7 @@ export default {
         if (bool || bool1) {
           shuiliuItem.style.display = "block";
         } else {
-          shuiliuItem.style.display = "none";
+          shuiliuItem.style.display = "block";
         }
       }
       // 事件总线触发灌溉阀事件
@@ -110,17 +116,27 @@ export default {
 }
 .water02 {
   position: absolute;
-  left: 245px;
+  left: 230px;
   top: 740px;
 }
 .water03 {
   position: absolute;
-  left: 193px;
-  top: 200px;
+  left: 43px;
+  top: 100px;
+}
+.water06 {
+  position: absolute;
+  left: 830px;
+  top: 395px;
+}
+.water07 {
+  position: absolute;
+  left: 830px;
+  top: 530px;
 }
 .water19 {
   position: absolute;
-  left: 1175px;
+  left: 1100px;
   top: 769px;
 }
 
