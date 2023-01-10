@@ -5,8 +5,8 @@
       <draggable class="shuifeiji-box" chosenClass="chosen" forceFallback="true" group="big" animation="1000">
         <div class="shuifeiji">
           <div class="shuifeiji-left">
-            <!-- <bgLeft></bgLeft> -->
-            <bgLeft2></bgLeft2>
+            <bgLeft></bgLeft>
+            <!-- <bgLeft2></bgLeft2> -->
           </div>
           <div class="shuifeiji-right">
             <bgRight></bgRight>
@@ -118,19 +118,25 @@ export default {
         .then(res => {
           if (res.code === 200) {
             this.allData = res.data
-            console.log(this.allData,4444)
-            // const vice_data = {
-            //   bs_base_id: this.$route.query.bs_base_id,
-            //   hd_device_parent_id: res.data.vice_hd_device_id
-            // }
-            this.PKid1 = this.allData.hd_device_childs[1].device_id
-            this.PKid2 = this.allData.vice_device_id
-            this.PCid = this.allData.hd_device_childs[0].device_id
-            Promise.all([getShuifeiData(this.PKid1), getShuifeiData(this.PKid2), getShuifeiData(this.PCid)]).then(([res1,res2,res3]) => {
-              this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
-              this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
-              this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
-            });
+            console.log(this.allData,'allData')
+            const vice_data = {
+              bs_base_id: this.$route.query.bs_base_id,
+              hd_device_parent_id: res.data.vice_hd_device_id
+            }
+            deviceList(vice_data).then(res => {
+              var viceArrObj = res.data.content.filter((item) => {
+                return item.hd_device_type_code == "JK-PK"
+              })
+              this.PKid1 = this.allData.hd_device_childs[1].device_id
+              this.PKid2 = viceArrObj[0].device_id
+              this.PCid = this.allData.hd_device_childs[0].device_id
+              Promise.all([getShuifeiData(this.PKid1), getShuifeiData(this.PKid2), getShuifeiData(this.PCid)]).then(([res1,res2,res3]) => {
+                this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+                this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+                this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
+              });
+            })
+
           }
         })
     },
