@@ -19,7 +19,7 @@
             <el-input v-model="shuifeiForm.name"></el-input>
           </el-form-item>
           <el-form-item label="主设备" prop="hd_device_id">
-            <el-select v-model="shuifeiForm.hd_device_id" placeholder="请选择主设备" @change="chooseMain" @visible-change="chooseMain">
+            <el-select v-model="shuifeiForm.hd_device_id" placeholder="请选择主设备" @change="chooseMain">
               <el-option v-for="item in $parent.hd_device_idListArr" :key="item.id" :label="item.name + ' ' + item.device_id" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -29,13 +29,13 @@
             </el-select>
           </el-form-item>
           <el-form-item label="采集设备" prop="pickEquipment">
-            <el-checkbox-group v-model="shuifeiForm.pickEquipment" size="small" @change="getSensorList" style="border: 1px solid #DCDFE6;border-radius: 4px;padding-top: 5px;">
-              <el-checkbox border v-for="item in $parent.selectSensorListArr" :key="item.id" :label="item.name + ' ' + item.device_id" @change="chooseSensorItem($event, item.id)"></el-checkbox>
+            <el-checkbox-group v-model="shuifeiForm.pickEquipment" size="small" style="border: 1px solid #DCDFE6;border-radius: 4px;padding-top: 5px;">
+              <el-checkbox border v-for="item in $parent.selectSensorListArr" :key="item.id" :label="item.id" @change="chooseSensorItem($event, item.id)">{{item.name + ' ' + item.device_id}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="摄像头" prop="pickSxt">
-            <el-checkbox-group v-model="shuifeiForm.pickSxt" size="small" @change="getSxtList" style="border: 1px solid #DCDFE6;border-radius: 4px;padding-top: 5px;">
-              <el-checkbox border v-for="item in $parent.selectSxtListArr" :key="item.id" :label="item.name" @change="chooseSxtItem($event, item.id)"></el-checkbox>
+            <el-checkbox-group v-model="shuifeiForm.pickSxt" size="small" style="border: 1px solid #DCDFE6;border-radius: 4px;padding-top: 5px;">
+              <el-checkbox border v-for="item in $parent.selectSxtListArr" :key="item.id" :label="item.id" @change="chooseSxtItem($event, item.id)">{{item.name}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </div>
@@ -68,7 +68,7 @@
 </template>
 <script>
 
-import { getDetailById } from '@/api/shuifei'
+import { getDetailById, deviceList, productSfDetail } from '@/api/shuifei'
 import { getToken } from '@/utils/auth'
 export default {
   name: 'addTable',
@@ -101,6 +101,8 @@ export default {
           },
         ],
       },
+      // 存储主设备的PC传感器id，与采集设备合并后，在第二步用
+      mainSensorId: [],
       // 存储第一步的采集设备数据，在第二步用
       needSensorListArr: [],
       needSensorId: [],
@@ -129,39 +131,69 @@ export default {
 
   },
   created () {
+    
   },
   methods: {
     // 展示表单
-    show (item) {
-      this.shuifeiForm = {
-        name: item.name,
-        hd_device_id: item.hd_device_id,
-        vice_hd_device_id: item.vice_hd_device_id,
-        pickEquipment: [],
-        pickSxt: [],
-        productSfDevices: [],
-        productSfModels: [
-          {
-            type:"",
-            productSfModelDetails:[]
-          },
-          {
-            type:"",
-            productSfModelDetails:[]
-          },
-          {
-            type:"",
-            productSfModelDetails:[]
-          },
-        ],
+    show (row) {
+      var sensorDevicesArr = row.productSfDevices.filter((item) => {
+        return item.hd_device_type_code != "JK-SX"
+      })
+      for(var i=0;i<sensorDevicesArr.length;i++){
+        this.needSensorId.push(sensorDevicesArr[i].hd_device_id)
       }
+
+      var sxtDevicesArr = row.productSfDevices.filter((item) => {
+        return item.hd_device_type_code == "JK-SX"
+      })
+      for(var i=0;i<sxtDevicesArr.length;i++){
+        this.needSxtId.push(sxtDevicesArr[i].hd_device_id)
+      }
+
+      // const data = {
+      //   id: row.id,
+      // }
+      // productSfDetail(data).then(res => {
+      //   var PCArrObj = res.data.content.filter((item) => {
+      //     return item.hd_device_type_code == "JK-PC"
+      //   })
+      //   this.mainSensorId = PCArrObj[0].id
+      // })
+      this.$nextTick(() => {
+        this.shuifeiForm = {
+          name: row.name,
+          hd_device_id: row.hd_device_id,
+          vice_hd_device_id: row.vice_hd_device_id,
+          pickEquipment: this.needSensorId,
+          pickSxt: this.needSxtId,
+          productSfDevices: [],
+          productSfModels: [
+            {
+              type:"",
+              productSfModelDetails:[]
+            },
+            {
+              type:"",
+              productSfModelDetails:[]
+            },
+            {
+              type:"",
+              productSfModelDetails:[]
+            },
+          ],
+        }
+        console.log(this.shuifeiForm)
+      })
+
       this.dialogVisible = true
-      this.needSensorId = []
+      // this.needSensorId = []
+      this.chooseMain(row.hd_device_id)
+      
     },
     // 选择主设备，判断是旁路式还是在线式，在线式则隐藏副设备
     chooseMain(main_hd_id){
       let obj = {};
-      obj = this.$parent.hd_device_idListArr.find((item) => { // 这里的testOptions就是上面遍历的测试源
+      obj = this.$parent.hd_device_idListArr.find((item) => { // 这里就是上面遍历的测试源
         return item.id == main_hd_id;// 筛选出匹配数据
       });
       if(obj.hd_device_type_code == "JK-SF"){
@@ -170,8 +202,18 @@ export default {
         this.vice_show = false
         this.shuifeiForm.vice_hd_device_id = ""
       }
+      // 筛选出主设备的PC传感器，用于第二步
+      const data = {
+        bs_base_id: this.$parent.bs_base_id,
+        hd_device_parent_id: main_hd_id
+      }
+      deviceList(data).then(res => {
+        var PCArrObj = res.data.content.filter((item) => {
+          return item.hd_device_type_code == "JK-PC"
+        })
+        this.mainSensorId = PCArrObj[0].id
+      })
     },
-
     // 获取环境数据数组列表(根据采集设备选中的值，用于第二步)
     chooseSensorItem(event,id){
       this.needSensorListArr = []
@@ -182,18 +224,6 @@ export default {
       } else {
         //如果是取消选中则从数组中删除该id
         this.needSensorId.splice(this.needSensorId.indexOf(id), 1);
-      }
-      for(let i=0;i<this.needSensorId.length;i++){
-        let data = {
-          hd_device_id: this.needSensorId[i],
-        }
-        getDetailById(data)
-          .then(res => {
-            if (res.code === 200) {
-              this.needSensorListArr.push.apply(this.needSensorListArr, res.data.sensor);
-              console.log(this.needSensorListArr)
-            }
-          })
       }
     },
     //获取视频监控数组列表(根据摄像头选中的值，用于第二步)
@@ -227,6 +257,23 @@ export default {
       this.$refs.form.validate().then(valdid => {
         if (!valdid) {
           return
+        }
+        // 根据主设备的PC传感器+所选的传感器设备，生成合并后的数组
+        this.needSensorListArr = []
+        var allSensorId = []
+        var allSensorId = JSON.parse(JSON.stringify(this.needSensorId))
+        allSensorId.push(this.mainSensorId)
+        for(let i=0;i<allSensorId.length;i++){
+          let data = {
+            hd_device_id: allSensorId[i],
+          }
+          getDetailById(data)
+            .then(res => {
+              if (res.code === 200) {
+                this.needSensorListArr.push.apply(this.needSensorListArr, res.data.sensor);
+                console.log(this.needSensorListArr)
+              }
+            })
         }
         this.active = 1
       })
