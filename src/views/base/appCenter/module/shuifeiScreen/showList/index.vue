@@ -1,11 +1,11 @@
 <template>
   <div class="showbox">
-    <draggable class="small-box" chosenClass="chosen" forceFallback="true" group="small" animation="1000">
+    <!-- <draggable class="small-box" chosenClass="chosen" forceFallback="true" group="small" animation="1000"> -->
     <!-- <shuju></shuju>
     <jiankong></jiankong>
     <rizhi></rizhi> -->
       <component :is="item.productSfModelType" v-for="item in allData.productSfModels" :key="item" :modelData="item.productSfModelDetails" :bs_base_id="bs_base_id" :hd_device_id="allData.hd_device_id"></component>
-    </draggable>
+    <!-- </draggable> -->
   </div>
 </template>
 

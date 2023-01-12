@@ -1,8 +1,8 @@
 <template>
   <div class="shuifeiji-bg">
     <headerNav :value="$route.query.id"></headerNav>
-    <!-- <div class="shuifeiji-box"> -->
-      <draggable class="shuifeiji-box" chosenClass="chosen" forceFallback="true" group="big" animation="1000">
+    <div class="shuifeiji-box">
+      <!-- <draggable class="shuifeiji-box" chosenClass="chosen" forceFallback="true" group="big" animation="1000"> -->
         <div class="shuifeiji">
           <div class="shuifeiji-left">
             <bgLeft></bgLeft>
@@ -15,8 +15,8 @@
         <div class="showList">
           <showList :allData="allData"></showList>
         </div>
-      </draggable>
-    <!-- </div> -->
+      <!-- </draggable> -->
+    </div>
   </div>
 </template>
 

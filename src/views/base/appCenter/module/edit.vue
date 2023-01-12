@@ -48,10 +48,10 @@
               <el-radio label="log">日志</el-radio>
             </el-radio-group>
             <el-select v-if="shuifeiForm.productSfModels[index].type=='sensor'" v-model="shuifeiForm.productSfModels[index].productSfModelDetails" multiple placeholder="请选择环境数据" value-key="id">
-              <el-option v-for="item in needSensorListArr" :key="item.id" :label="item.device_name + ' - ' + item.name" :value="item"></el-option>
+              <el-option v-for="item in allSensorListArr" :key="item.id" :label="item.device_name + ' - ' + item.name" :value="item.hd_device_sensor_id"></el-option>
             </el-select>
             <el-select v-if="shuifeiForm.productSfModels[index].type=='sxt'" v-model="shuifeiForm.productSfModels[index].productSfModelDetails" multiple placeholder="请选择摄像头" value-key="id">
-              <el-option v-for="item in needSxtListArr" :key="item.id" :label="item.name" :value="item"></el-option>
+              <el-option v-for="item in needSxtListArr" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
         </div>
@@ -74,6 +74,10 @@ export default {
   name: 'addTable',
   data () {
     return {
+      // 所编辑行的id
+      id:'',
+      // 原始的主设备id,用于做比较判断有没编辑过主设备
+      original_hd_device_id:'',
       dialogVisible: false,
       title:"编辑水肥系统",
       // 表单默认展示第一步
@@ -104,7 +108,7 @@ export default {
       // 存储主设备的PC传感器id，与采集设备合并后，在第二步用
       mainSensorId: [],
       // 存储第一步的采集设备数据，在第二步用
-      needSensorListArr: [],
+      allSensorListArr: [],
       needSensorId: [],
       // 存储第一步的摄像头数据，在第二步用
       needSxtListArr: [],
@@ -136,6 +140,9 @@ export default {
   methods: {
     // 展示表单
     show (row) {
+      this.id = row.id
+      this.original_hd_device_id = JSON.parse(JSON.stringify(row.hd_device_id))
+
       var sensorDevicesArr = row.productSfDevices.filter((item) => {
         return item.hd_device_type_code != "JK-SX"
       })
@@ -150,15 +157,6 @@ export default {
         this.needSxtId.push(sxtDevicesArr[i].hd_device_id)
       }
 
-      // const data = {
-      //   id: row.id,
-      // }
-      // productSfDetail(data).then(res => {
-      //   var PCArrObj = res.data.content.filter((item) => {
-      //     return item.hd_device_type_code == "JK-PC"
-      //   })
-      //   this.mainSensorId = PCArrObj[0].id
-      // })
       this.$nextTick(() => {
         this.shuifeiForm = {
           name: row.name,
@@ -182,13 +180,28 @@ export default {
             },
           ],
         }
-        console.log(this.shuifeiForm)
       })
 
       this.dialogVisible = true
-      // this.needSensorId = []
+      // 手动触发选择了主设备
       this.chooseMain(row.hd_device_id)
-      
+
+      // 获取第二步的原始数据
+      const data = {
+        id: row.id,
+      }
+      productSfDetail(data).then(res => {
+        for(var i=0;i<res.data.productSfModels.length;i++){
+          this.shuifeiForm.productSfModels[i].type = res.data.productSfModels[i].productSfModelType
+          this.shuifeiForm.productSfModels[i].productSfModelDetails = res.data.productSfModels[i].productSfModelDetails.map(item => {
+            if(item.hd_device_sensor_id != null){
+              return item.hd_device_sensor_id
+            }else{
+              return item.hd_device_id
+            }
+          })
+        }
+      })
     },
     // 选择主设备，判断是旁路式还是在线式，在线式则隐藏副设备
     chooseMain(main_hd_id){
@@ -216,7 +229,6 @@ export default {
     },
     // 获取环境数据数组列表(根据采集设备选中的值，用于第二步)
     chooseSensorItem(event,id){
-      this.needSensorListArr = []
       // 如果是选中
       if (event) {
         // 把选中的id存入数组
@@ -224,11 +236,25 @@ export default {
       } else {
         //如果是取消选中则从数组中删除该id
         this.needSensorId.splice(this.needSensorId.indexOf(id), 1);
+        // 编辑：清除掉数据
+        this.shuifeiForm.productSfModels = [
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+        ]
       }
     },
     //获取视频监控数组列表(根据摄像头选中的值，用于第二步)
     chooseSxtItem(event,id){
-      this.needSxtListArr = []
       // 如果是选中
       if (event) {
         // 把选中的id存入数组
@@ -236,14 +262,21 @@ export default {
       } else {
         //如果是取消选中则从数组中删除该id
         this.needSxtId.splice(this.needSxtId.indexOf(id), 1);
-      }
-      for(let i=0;i<this.needSxtId.length;i++){
-        this.$parent.selectSxtListArr.find((item)=>{
-          if(item.id == this.needSxtId[i]){
-            this.needSxtListArr.push(item)
-            console.log(this.needSxtListArr)
-          }
-        });
+        // 编辑：清除掉数据
+        this.shuifeiForm.productSfModels = [
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+        ]
       }
     },
     //模块单选改变的时候
@@ -258,8 +291,8 @@ export default {
         if (!valdid) {
           return
         }
-        // 根据主设备的PC传感器+所选的传感器设备，生成合并后的数组
-        this.needSensorListArr = []
+        // 根据主设备的PC传感器+所选的传感器设备，生成第二步的环境数据
+        this.allSensorListArr = []
         var allSensorId = []
         var allSensorId = JSON.parse(JSON.stringify(this.needSensorId))
         allSensorId.push(this.mainSensorId)
@@ -270,11 +303,41 @@ export default {
           getDetailById(data)
             .then(res => {
               if (res.code === 200) {
-                this.needSensorListArr.push.apply(this.needSensorListArr, res.data.sensor);
-                console.log(this.needSensorListArr)
+                this.allSensorListArr.push.apply(this.allSensorListArr, res.data.sensor);
+                console.log(this.allSensorListArr)
               }
             })
         }
+        // 根据所选的摄像头，生成第二步的视频监控数据
+        this.needSxtListArr = []
+        for(let i=0;i<this.needSxtId.length;i++){
+          this.$parent.selectSxtListArr.find((item)=>{
+            if(item.id == this.needSxtId[i]){
+              this.needSxtListArr.push(item)
+            }
+          });
+        }
+        // 判断主设备有没改变过，有则清空第二步
+        if(this.shuifeiForm.hd_device_id == this.original_hd_device_id){
+          console.log('主设备相同')
+        }else{
+          this.shuifeiForm.productSfModels = [
+            {
+              type:"",
+              productSfModelDetails:[]
+            },
+            {
+              type:"",
+              productSfModelDetails:[]
+            },
+            {
+              type:"",
+              productSfModelDetails:[]
+            },
+          ]
+          console.log('主设备不同，清空')
+        }
+
         this.active = 1
       })
     },
@@ -294,6 +357,7 @@ export default {
         let productSfModels = this.shuifeiForm.productSfModels
         // 构建所需提交的表单
         let formData = new FormData()
+        formData.append('id', this.id)
         formData.append('name', this.shuifeiForm.name)
         formData.append('hd_device_id', this.shuifeiForm.hd_device_id)
         formData.append('vice_hd_device_id', this.shuifeiForm.vice_hd_device_id)
@@ -302,14 +366,14 @@ export default {
         })
         productSfModels.forEach((value, index) => {
           formData.append(`productSfModels[${index}].type`, value.type);
-          if(value.type == 'sxt'){
-            productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
-              formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_id`, value2.id)
-            })
-          }
           if(value.type == 'sensor'){
             productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
-              formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_sensor_id`, value2.hd_device_sensor_id)
+              formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_sensor_id`, value2)
+            })
+          }
+          if(value.type == 'sxt'){
+            productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{
+              formData.append(`productSfModels[${index}].productSfModelDetails[${index2}].hd_device_id`, value2)
             })
           }
           productSfModels[index].productSfModelDetails.forEach((value2,index2)=>{

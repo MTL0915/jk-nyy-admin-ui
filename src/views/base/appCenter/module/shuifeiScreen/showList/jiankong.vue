@@ -79,7 +79,9 @@ export default {
 .tags_box{
   display: flex;
   align-items: center;
-  justify-content: right;
+  /* justify-content: right; */
+  overflow-x: scroll;
+  width: 100%;
 }
 .tags{
   text-align: center;
