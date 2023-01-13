@@ -71,7 +71,7 @@ export default {
   height: 50px;
 }
 .toggleBody{
-  height: calc(100% - 50px);
+  height: calc(100% - 45px);
 }
 .toggle-body-item{
   height: 100%
@@ -101,5 +101,22 @@ export default {
 }
 .isActive .toggleSelect{
   background: url(~@/assets/images/shuifeiji/select_bg_on.png) no-repeat;
+}
+
+.tags_box::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 5px;
+}
+
+.tags_box::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(16,159,250,0.8);
+  background: rgba(255,255,255,0.9);
+}
+
+.tags_box::-webkit-scrollbar-track { /*滚动条里面轨道*/
+  -webkit-box-shadow: inset 0 0 5px rgba(255,255,255,0.9);
+  border-radius: 0;
+  background: rgba(0,0,0,0);
 }
 </style>

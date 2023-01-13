@@ -195,7 +195,7 @@ export default {
                 this.hd_device_idListArr.push(this.deviceListArr[i])
               }
             }
-            // 副设备：过滤出副设备的SF与FM
+            // 副设备：过滤出副设备的GK
             for(let i=0;i<this.deviceListArr.length;i++){
               if(this.deviceListArr[i].device_id.substr(0, 2) == ('GK')){
                 this.vice_hd_device_idListArr.push(this.deviceListArr[i])

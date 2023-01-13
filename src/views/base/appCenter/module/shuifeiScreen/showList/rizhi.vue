@@ -143,7 +143,7 @@ export default {
 .tags_box{
   display: flex;
   align-items: center;
-  justify-content: right;
+  /* justify-content: right; */
 }
 .tags{
   text-align: center;
