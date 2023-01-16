@@ -95,7 +95,7 @@ export default {
         if (res.code === 200) {
           this.logList = res.data.content  
         }
-        console.log(res)
+        // console.log(res)
       })
     },
     timestampToTime(timestamp) {
