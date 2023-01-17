@@ -13,11 +13,7 @@
             </el-select>
           </div>
           <ul class="nav">
-            <li class="item">首页</li>
-            <li class="item">策略</li>
-            <li class="item">日志</li>
-            <li class="item">数据</li>
-            <li class="item">视频</li>
+            <li class="item" v-for="(item, index) in navList" :key="index" :class="{ isActive: index == toggleIndex }" @click="HandelToggle(index)">{{item.name}}</li>
           </ul>
         </div>
         <div class="header-right">
@@ -29,7 +25,7 @@
               <div class="led-times">{{dateTime}}</div>
               <div class="led-times-info">{{dateYear}}{{dateWeek}}</div>
           </div>
-          <img src="@/assets/images/shuifeiji/set.png" class="set-icon">
+          <img src="@/assets/images/shuifeiji/set.png" class="set-icon" @click="handleSet">
         </div>
     </div>
 </template>
@@ -50,7 +46,30 @@ export default {
             timer:null,
             bs_base_id:'',
             list:[],
-            value:''
+            value:'',
+            toggleIndex: 0,
+            navList:[
+              {
+                name:'首页',
+                type:'home'
+              },
+              {
+                name:'策略',
+                type:'strategy'
+              },
+              {
+                name:'日志',
+                type:'log'
+              },
+              {
+                name:'数据',
+                type:'data'
+              },
+              {
+                name:'视频',
+                type:'sxt'
+              },
+            ]
         };
     },
     created(){
@@ -66,6 +85,7 @@ export default {
             this.dateYear = date.format('YYYY-MM-DD' + ' ');
             this.dateWeek = date.format(this.weekday[date.day()]);
         }, 1000)
+        this.HandelToggle(0)
     },
     beforeDestroy(){
         if(this.timer){
@@ -73,6 +93,12 @@ export default {
         }
     },
     methods: {
+      // 设置返回水肥列表页
+      handleSet() {
+        this.$router.push({
+          path: "/appcenter/fertilizer",
+        });
+      },
       // 获取水肥应用列表（主列表）
       getList(){
         const _params = {
@@ -94,7 +120,10 @@ export default {
           },
         });
         this.$router.go(0)
-      }
+      },
+      HandelToggle(index){
+        this.toggleIndex = index;
+      },
     }
 }
 </script>
@@ -146,6 +175,9 @@ li {
 .header-left .nav li:hover{
   background: url(~@/assets/images/shuifeiji/header_item_bg_active.png) no-repeat;
 }
+.header-left .nav li.isActive{
+  background: url(~@/assets/images/shuifeiji/header_item_bg_active.png) no-repeat;
+}
 .header-right{
   display: flex;
   width: 340px;
@@ -180,6 +212,9 @@ li {
 }
 .led-times-info{
   font-size: 16px;
+}
+.set-icon{
+  cursor: pointer;
 }
 
 /* 修改饿了么选择框 */

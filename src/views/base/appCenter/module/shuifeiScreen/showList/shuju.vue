@@ -11,12 +11,12 @@
           @click="changNav(index)"
         >
           <img :src="item.src" style="width:45px;height:45px"/>
-          <div style="color: #01ceeb; font-size:12px;text-align:center;">{{ item.hd_device_sensor_name }}</div>
+          <div style="color: #01ceeb; font-size:12px;text-align:center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ item.hd_device_sensor_name }}</div>
           <div style="text-align:center;">
             <span
               class="num"
               :style="{ color: item.status == '1' ? '#f00' : '' }"
-              style="font-size: 12px;text-align:center;"
+              style="font-size: 12px;text-align:center;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;"
               :id="'num' + index"
               >{{ item.value }}{{ item.unit }}</span
             >
@@ -135,7 +135,7 @@ export default {
               it.src = process.env.IMG_URL + item.sensor[0].hd_sensor_type_small_image_path;
               it.echartsData = item.sensor[0].data;
               it.xAxisData = item.timestamp.map(v =>
-                formatDate(Number(v), 'hh:mm:ss')
+                formatDate(Number(v), 'hh:mm')
               );
               return true;
             }
@@ -279,7 +279,7 @@ export default {
 .zhwl-card .row{
     color:#fff;
     flex-direction:column;
-    height:80px;
+    height:90px;
     justify-content:space-around;
     padding:4px 6px;
     border-radius:3px;
@@ -289,6 +289,11 @@ export default {
     cursor:pointer;
     background:url('~@/assets/images/echarts/line/jcsj_bj.png') center no-repeat;
     background-size:100% 100%;
+    width:18.5%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .zhwl-card .row-active{
