@@ -51,7 +51,7 @@ export default {
 
 <style scoped>
 .bg-left {
-  background: url(~@/assets/images/shuifeiji/bg-left.png) no-repeat;
+  background: url(~@/assets/images/shuifeiji/bg-left-panglu.png) no-repeat;
   width: 1400px;
   height: 800px;
   background-size: 100% 100%;

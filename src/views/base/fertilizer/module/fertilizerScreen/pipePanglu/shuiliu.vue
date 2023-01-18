@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import water01 from "../water/water01.vue";
-import water02 from "../water/water02.vue";
-import water03 from "../water/water03.vue";
-import water19 from "../water/water19.vue";
+import water01 from "./water/water01.vue";
+import water02 from "./water/water02.vue";
+import water03 from "./water/water03.vue";
+import water19 from "./water/water19.vue";
 export default {
   mounted() {
     // 一开始先触发

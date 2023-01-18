@@ -11,12 +11,12 @@
 </template>
 
 <script>
-import water01 from "../water2/water01.vue";
-import water02 from "../water2/water02.vue";
-import water03 from "../water2/water03.vue";
-import water06 from "../water2/water06.vue";
-import water07 from "../water2/water07.vue";
-import water19 from "../water2/water19.vue";
+import water01 from "./water/water01.vue";
+import water02 from "./water/water02.vue";
+import water03 from "./water/water03.vue";
+import water06 from "./water/water06.vue";
+import water07 from "./water/water07.vue";
+import water19 from "./water/water19.vue";
 export default {
   mounted() {
     // 一开始先触发
@@ -98,7 +98,7 @@ export default {
         if (bool || bool1) {
           shuiliuItem.style.display = "block";
         } else {
-          shuiliuItem.style.display = "block";
+          shuiliuItem.style.display = "none";
         }
       }
       // 事件总线触发灌溉阀事件

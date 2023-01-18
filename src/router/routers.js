@@ -497,18 +497,18 @@ export const constantRouterMap = [
                  import("@/views/base/video/module/CameraPhoto"),
                hidden: true
              },
-              {
-                path: "/appcenter/fertilizer",
-                meta: {
-                  title: "水肥应用",
-                  name: "fertilizer",
-                  hideTitle: false,
-                  noCache: true
-                },
-                component: () =>
-                  import("@/views/base/appCenter/index.vue"),
-                hidden: true
-              },
+             {
+               path: "/appcenter/fertilizer",
+               meta: {
+                 title: "水肥应用",
+                 name: "fertilizer",
+                 hideTitle: false,
+                 noCache: true
+               },
+               component: () =>
+                 import("@/views/base/fertilizer/index.vue"),
+               hidden: true
+             },
              {
                path: "/map",
                meta: {
@@ -807,8 +807,7 @@ export const constantRouterMap = [
              hideTitle: false
            },
            component: () =>
-             import("@/views/base/appCenter/module/shuifeiScreen/shuifeiji"),
-            //  import("@/views/base/equip/module/daping/shuifeiji"),
+             import("@/views/base/fertilizer/module/fertilizerScreen/shuifeiji"),
            hidden: true
          }
          // { path: '*', redirect: '/404', hidden: true }

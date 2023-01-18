@@ -37,8 +37,8 @@
 <script>
 import { openOrCloseChannel } from "@/utils/websocket_util.js";
 import loading from "../loading";
-import water20 from "../water/water20.vue";
-import water21 from "../water/water21.vue";
+import water20 from "./water/water20.vue";
+import water21 from "./water/water21.vue";
 export default {
   components: {
     loading,

@@ -9,171 +9,9 @@
   >
     <!--操作装置等待-->
     <loading ref="loading" />
-    <!-- 小水流 -->
-    <div class="smallWater-box">
-      <div class="smallWater smallWater1" where="17" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater2" where="17" or="">
-        <div class="shuiliuB">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_b.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater3" where="18" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater4" where="18" or="">
-        <div class="shuiliuB">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_b.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater5" where="19" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater6" where="19" or="">
-        <div class="shuiliuB">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_b.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater7" where="20" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater8" where="20" or="">
-        <div class="shuiliuB">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_b.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater9" where="21" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater10" where="21" or="">
-        <div class="shuiliuB">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_b.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater11" where="22" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater12" where="22" or="">
-        <div class="shuiliuB">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_b.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater13" where="23" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater14" where="23" or="">
-        <div class="shuiliuB">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_b.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater15" where="24" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater16" where="24" or="">
-        <div class="shuiliuB">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_b.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater17" where="33" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater18" where="34" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater19" where="35" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater20" where="36" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater21" where="37" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater22" where="38" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater23" where="39" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater24" where="40" or="">
-        <div class="shuiliu_r">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_r.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater25" where="25" or="">
-        <div class="shuiliu_l">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_l.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater26" where="26" or="">
-        <div class="shuiliu_l">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_l.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater27" where="27" or="">
-        <div class="shuiliu_l">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_l.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater28" where="28" or="">
-        <div class="shuiliu_l">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_l.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater29" where="29" or="">
-        <div class="shuiliu_l">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_l.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater30" where="30" or="">
-        <div class="shuiliu_l">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_l.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater31" where="31" or="">
-        <div class="shuiliu_l">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_l.png" />
-        </div>
-      </div>
-      <div class="smallWater smallWater32" where="32" or="">
-        <div class="shuiliu_l">
-          <img class="" src="@/assets/images/shuifeiji/smallWater_l.png" />
-        </div>
-      </div>
-    </div>
+
     <!--入口背景-->
-    <div class="pot_entry" v-show="potsArr.length"></div>
+    <!-- <div class="pot_entry" v-show="potsArr.length"></div> -->
     <!--循环遍历每一个桶-->
     <div
       class="pot_box"
@@ -222,48 +60,6 @@
         :class="[item.zhufeifa.value ? 'btn_on' : 'btn_off']"
         :code="`${item.zhufeifa.channel}`"
       ></i>
-      <!--注水阀按钮-->
-      <i
-        @click="
-          zhushuiBtnClick(
-            $event,
-            index,
-            item.zhushuifa.hd_device_sensor_id,
-            item.zhushuifa.value
-          )
-        "
-        class="zhushuiBtn"
-        :class="[item.zhushuifa.value ? 'smallBtn_on' : 'smallBtn_off']"
-        :code="`${item.zhushuifa.channel}`"
-      ></i>
-      <!--进肥阀按钮-->
-      <i
-        @click="
-          jinfeiBtnClick(
-            $event,
-            index,
-            item.jinfeifa.hd_device_sensor_id,
-            item.jinfeifa.value
-          )
-        "
-        class="jinfeiBtn"
-        :class="[item.jinfeifa.value ? 'smallBtn_on' : 'smallBtn_off']"
-        :code="`${item.jinfeifa.channel}`"
-      ></i>
-      <!--排水阀按钮-->
-      <i
-        @click="
-          paishuiBtnClick(
-            $event,
-            index,
-            item.paishuifa.hd_device_sensor_id,
-            item.paishuifa.value
-          )
-        "
-        class="paishuiBtn"
-        :class="[item.paishuifa.value ? 'smallBtn_on' : 'smallBtn_off']"
-        :code="`${item.paishuifa.channel}`"
-      ></i>
       <water04 class="water water04" where="41,45"></water04>
       <water05
         class="water water05"
@@ -276,8 +72,8 @@
 <script>
 import { openOrCloseChannel } from "@/utils/websocket_util.js";
 import loading from "../loading";
-import water04 from "../water/water04.vue";
-import water05 from "../water/water05.vue";
+import water04 from "./water/water04.vue";
+import water05 from "./water/water05.vue";
 export default {
   data() {
     return {
@@ -620,7 +416,7 @@ export default {
   height: 658px;
   /* position: relative; */
 }
-.pot_entry {
+/* .pot_entry {
   width: 196px;
   height: 658px;
   background-image: url(~@/assets/images/shuifeiji/pot_01.png);
@@ -630,7 +426,7 @@ export default {
   position: absolute;
   left: -196px;
   top: -50px;
-}
+} */
 .pot_box {
   position: absolute;
   left: 0;
@@ -638,16 +434,16 @@ export default {
   width: 120px;
   /* height: 100%; */
   height: 658px;
-  background-image: url(~@/assets/images/shuifeiji/pot_03.png);
+  background-image: url(~@/assets/images/shuifeiji/pot_zaixian_02.png);
   background-position: top;
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 .pot_box:last-child {
-  background-image: url(~@/assets/images/shuifeiji/pot_04.png);
+  background-image: url(~@/assets/images/shuifeiji/pot_zaixian_02.png);
 }
 .pot_box1 {
-  background-image: url(~@/assets/images/shuifeiji/pot_02.png);
+  background-image: url(~@/assets/images/shuifeiji/pot_zaixian_01.png);
   /* height: 448px; */
 }
 

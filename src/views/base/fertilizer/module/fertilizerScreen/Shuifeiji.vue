@@ -5,8 +5,8 @@
       <!-- <draggable class="shuifeiji-box" chosenClass="chosen" forceFallback="true" group="big" animation="1000"> -->
         <div class="shuifeiji">
           <div class="shuifeiji-left">
-            <bgLeft></bgLeft>
-            <!-- <bgLeft2></bgLeft2> -->
+            <bgLeftPanglu></bgLeftPanglu>
+            <!-- <bgLeftZaixian></bgLeftZaixian> -->
           </div>
           <div class="shuifeiji-right">
             <bgRight></bgRight>
@@ -30,9 +30,9 @@ import { getShuifeiData } from "@/api/getShuifeiData";
 
 import draggable from 'vuedraggable'
 
-import bgLeft from "./pipe/bgLeft.vue";
-import bgLeft2 from "./pipe2/bgLeft.vue";
-import bgRight from "./pipe/bgRight.vue";
+import bgLeftPanglu from "./pipePanglu/bgLeft.vue";
+import bgLeftZaixian from "./pipeZaixian/bgLeft.vue";
+import bgRight from "./pipePanglu/bgRight.vue";
 import showList from "./showList";
 import headerNav from "./Header.vue"
 import { productSfDetail, deviceList } from '@/api/shuifei'
@@ -52,8 +52,8 @@ export default {
     };
   },
   components: {
-    bgLeft,
-    bgLeft2,
+    bgLeftPanglu,
+    bgLeftZaixian,
     bgRight,
     showList,
     headerNav,
