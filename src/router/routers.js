@@ -807,8 +807,29 @@ export const constantRouterMap = [
              hideTitle: false
            },
            component: () =>
-             import("@/views/base/fertilizer/module/fertilizerScreen/shuifeiji"),
-           hidden: true
+             import("@/views/base/fertilizer/module/fertilizerScreen/index"),
+           hidden: true,
+           redirect: "/bigScreenHome",
+           children: [
+             {
+               path: "/bigScreenHome",
+               component: () =>
+                 import("@/views/base/fertilizer/module/fertilizerScreen/home"),
+               name: "水肥大屏首页",
+               meta: {
+                 title: "水肥大屏首页",
+               }
+             },
+             {
+               path: "/bigScreenLog",
+               component: () =>
+                 import("@/views/base/fertilizer/module/fertilizerScreen/log"),
+               name: "水肥大屏日志",
+               meta: {
+                 title: "水肥大屏日志",
+               }
+             },
+           ]
          }
          // { path: '*', redirect: '/404', hidden: true }
        ];

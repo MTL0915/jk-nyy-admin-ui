@@ -13,7 +13,7 @@
             </el-select>
           </div>
           <ul class="nav">
-            <li class="item" v-for="(item, index) in navList" :key="index" :class="{ isActive: index == toggleIndex }" @click="HandelToggle(index)">{{item.name}}</li>
+            <li class="item" v-for="(item, index) in navList" :key="index" :class="{ isActive: index == toggleIndex }" @click="HandelToggle(index,item.router)">{{item.name}}</li>
           </ul>
         </div>
         <div class="header-right">
@@ -51,30 +51,35 @@ export default {
             navList:[
               {
                 name:'首页',
-                type:'home'
+                type:'home',
+                router:'bigScreenHome'
               },
               {
                 name:'策略',
-                type:'strategy'
+                type:'strategy',
+                router:'bigScreenStrategy'
               },
               {
                 name:'日志',
-                type:'log'
+                type:'log',
+                router:'bigScreenLog'
               },
               {
                 name:'数据',
-                type:'data'
+                type:'data',
+                router:'bigScreenData'
               },
               {
                 name:'视频',
-                type:'sxt'
+                type:'sxt',
+                router:'bigScreenSxt'
               },
             ]
         };
     },
     created(){
       // 获取当前基地id
-      this.bs_base_id = this.$parent.bs_base_id
+      this.bs_base_id = this.$route.query.bs_base_id
       // 获取当前基地水肥应用，用于头部下拉列表
       this.getList()
     },
@@ -85,7 +90,7 @@ export default {
             this.dateYear = date.format('YYYY-MM-DD' + ' ');
             this.dateWeek = date.format(this.weekday[date.day()]);
         }, 1000)
-        this.HandelToggle(0)
+        this.HandelToggle(0,'bigScreenHome')
     },
     beforeDestroy(){
         if(this.timer){
@@ -108,6 +113,7 @@ export default {
           if (res.code === 200) {
             // this.value = this.$parent.allData.id
             this.list = res.data.content
+            console.log(this.list,112233)
           }
         })
       },
@@ -121,8 +127,15 @@ export default {
         });
         this.$router.go(0)
       },
-      HandelToggle(index){
+      HandelToggle(index,router){
         this.toggleIndex = index;
+        this.$router.push({
+          path: '/'+router,
+          query: {
+            bs_base_id: this.bs_base_id,
+            id: this.value,
+          },
+        });
       },
     }
 }
