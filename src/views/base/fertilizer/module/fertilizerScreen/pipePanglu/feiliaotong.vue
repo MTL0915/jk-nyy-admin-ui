@@ -236,8 +236,9 @@
         :class="[item.zhushuifa.value ? 'smallBtn_on' : 'smallBtn_off']"
         :code="`${item.zhushuifa.channel}`"
       ></i>
-      <!--进肥阀按钮-->
+      <!--进肥阀按钮，（传送阀按钮）-->
       <i
+        v-if="item.jinfeifa"
         @click="
           jinfeiBtnClick(
             $event,
@@ -386,7 +387,7 @@ export default {
       this.potsArr = this.potsData.map((item, index) => {
         return { ...item, ...this.potsBtn[index] };
       });
-      // console.log(this.potsArr);
+      // console.log(this.potsArr,'水桶');
     },
 
     chuanganqiArr(chuanganqiArr) {

@@ -60,7 +60,7 @@ export default {
           }
         }
       }
-      console.log(state.openKey);
+      console.log(state.openKey,'打开的按钮');
     },
     ADD_CODE(state, code) {
       state.openKey.push(code);

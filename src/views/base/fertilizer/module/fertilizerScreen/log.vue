@@ -1,6 +1,12 @@
 <template>
-  <div class="log">
-    日志
+  <div class="box">
+    <div class="sidebar">
+      <ul class="nav">
+        <li><a id="_1" href="#">Menu1</a></li>
+        <li><a id="_2" href="#">Menu2</a></li>
+      </ul>
+    </div>
+    <div class="content"></div>
   </div>
 </template>
 
@@ -10,6 +16,18 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.box{
+  display: flex;
+}
+.sidebar{
+  width: 270px;
+  height: 100%;
+  background-color: #acacac;
+}
+.content{
+  width: calc(100% - 270px);
+  height: 100%;
+  background-color: #abcdef;
+}
 </style>

@@ -158,8 +158,10 @@ export default {
         ],
       }
       this.dialogVisible = true
+      this.active = 0
       this.mainSensorId = []
       this.needSensorId = []
+      this.needSxtId = []
     },
     // 选择主设备，判断是旁路式还是在线式，在线式则隐藏副设备
     chooseMain(main_hd_id){
@@ -195,6 +197,21 @@ export default {
       } else {
         //如果是取消选中则从数组中删除该id
         this.needSensorId.splice(this.needSensorId.indexOf(id), 1);
+        // 新增：清除掉数据
+        this.shuifeiForm.productSfModels = [
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+        ]
       }
     },
     //获取视频监控数组列表(根据摄像头选中的值，用于第二步)
@@ -206,6 +223,21 @@ export default {
       } else {
         //如果是取消选中则从数组中删除该id
         this.needSxtId.splice(this.needSxtId.indexOf(id), 1);
+        // 新增：清除掉数据
+        this.shuifeiForm.productSfModels = [
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+          {
+            type:"",
+            productSfModelDetails:[]
+          },
+        ]
       }
     },
     //模块单选改变的时候
@@ -233,7 +265,7 @@ export default {
             .then(res => {
               if (res.code === 200) {
                 this.allSensorListArr.push.apply(this.allSensorListArr, res.data.sensor);
-                console.log(this.allSensorListArr)
+                console.log(this.allSensorListArr,'最终传感器')
               }
             })
         }
@@ -243,7 +275,7 @@ export default {
           this.$parent.selectSxtListArr.find((item)=>{
             if(item.id == this.needSxtId[i]){
               this.needSxtListArr.push(item)
-              console.log(this.needSxtListArr)
+              console.log(this.needSxtListArr,'最终摄像头')
             }
           });
         }

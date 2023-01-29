@@ -112,23 +112,73 @@ export default {
           if (res.code === 200) {
             this.allData = res.data
             console.log(this.allData,'allData')
-            const vice_data = {
-              bs_base_id: this.$route.query.bs_base_id,
-              hd_device_parent_id: res.data.vice_hd_device_id
-            }
-            deviceList(vice_data).then(res => {
-              var viceArrObj = res.data.content.filter((item) => {
-                return item.hd_device_type_code == "JK-PK"
+            // 有副设备的情况
+            if(res.data.vice_hd_device_id){
+              const vice_data = {
+                bs_base_id: this.$route.query.bs_base_id,
+                hd_device_parent_id: res.data.vice_hd_device_id
+              }
+              deviceList(vice_data).then(res => {
+                var viceArrObj = res.data.content.filter((item) => {
+                  return item.hd_device_type_code == "JK-PK"
+                })
+                // this.PKid1 = this.allData.hd_device_childs[1].device_id
+                this.PKid1 = this.allData.hd_device_childs.filter((item) => {
+                  return item.device_id.slice(0,2) == "PK"
+                })[0].device_id
+                this.PKid2 = viceArrObj[0].device_id
+                // this.PCid = this.allData.hd_device_childs[0].device_id
+                this.PCid = this.allData.hd_device_childs.filter((item) => {
+                  return item.device_id.slice(0,2) == "PC"
+                })[0].device_id
+                Promise.all([getShuifeiData(this.PKid1), getShuifeiData(this.PKid2), getShuifeiData(this.PCid)]).then(([res1,res2,res3]) => {
+                  this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+                  this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+                  this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
+                });
               })
-              this.PKid1 = this.allData.hd_device_childs[1].device_id
-              this.PKid2 = viceArrObj[0].device_id
-              this.PCid = this.allData.hd_device_childs[0].device_id
-              Promise.all([getShuifeiData(this.PKid1), getShuifeiData(this.PKid2), getShuifeiData(this.PCid)]).then(([res1,res2,res3]) => {
-                this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
-                this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+            }else{
+              // 没有副设备的情况
+              this.PKid1 = this.allData.hd_device_childs.filter((item) => {
+                return item.device_id.slice(0,2) == "PK"
+              })[0].device_id
+
+              this.PCid = this.allData.hd_device_childs.filter((item) => {
+                return item.device_id.slice(0,2) == "PC"
+              })[0].device_id
+              Promise.all([getShuifeiData(this.PKid1), getShuifeiData(this.PCid)]).then(([res1,res3]) => {
+                this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor});
+                this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor});
                 this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
               });
-            })
+            }
+            // const vice_data = {
+            //   bs_base_id: this.$route.query.bs_base_id,
+            //   hd_device_parent_id: res.data.vice_hd_device_id
+            // }
+            // deviceList(vice_data).then(res => {
+            //   console.log(res,'副设备数据')
+            //   var viceArrObj = res.data.content.filter((item) => {
+            //     return item.hd_device_type_code == "JK-PK"
+            //   })
+            //   // this.PKid1 = this.allData.hd_device_childs[1].device_id
+            //   this.PKid1 = this.allData.hd_device_childs.filter((item) => {
+            //     return item.device_id.slice(0,2) == "PK"
+            //   })[0].device_id
+            //   this.PKid2 = viceArrObj[0].device_id
+            //   // this.PCid = this.allData.hd_device_childs[0].device_id
+            //   this.PCid = this.allData.hd_device_childs.filter((item) => {
+            //     return item.device_id.slice(0,2) == "PC"
+            //   })[0].device_id
+            //   console.log(this.PKid1,'pk1')
+            //   console.log(this.PKid2,'pk2')
+            //   console.log(this.PCid,'pc')
+            //   Promise.all([getShuifeiData(this.PKid1), getShuifeiData(this.PKid2), getShuifeiData(this.PCid)]).then(([res1,res2,res3]) => {
+            //     this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+            //     this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
+            //     this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
+            //   });
+            // })
 
           }
         })

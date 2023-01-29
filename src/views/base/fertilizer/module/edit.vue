@@ -143,16 +143,20 @@ export default {
       this.id = row.id
       this.original_hd_device_id = JSON.parse(JSON.stringify(row.hd_device_id))
 
+      // 先清空，在放入原来的传感器id
       var sensorDevicesArr = row.productSfDevices.filter((item) => {
         return item.hd_device_type_code != "JK-SX"
       })
+      this.needSensorId = []
       for(var i=0;i<sensorDevicesArr.length;i++){
         this.needSensorId.push(sensorDevicesArr[i].hd_device_id)
       }
-
+      
+      // 先清空，在放入原来的摄像头id
       var sxtDevicesArr = row.productSfDevices.filter((item) => {
         return item.hd_device_type_code == "JK-SX"
       })
+      this.needSxtId = []
       for(var i=0;i<sxtDevicesArr.length;i++){
         this.needSxtId.push(sxtDevicesArr[i].hd_device_id)
       }
@@ -180,6 +184,7 @@ export default {
             },
           ],
         }
+        this.active = 0
       })
 
       this.dialogVisible = true

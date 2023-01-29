@@ -113,7 +113,6 @@ export default {
           if (res.code === 200) {
             // this.value = this.$parent.allData.id
             this.list = res.data.content
-            console.log(this.list,112233)
           }
         })
       },

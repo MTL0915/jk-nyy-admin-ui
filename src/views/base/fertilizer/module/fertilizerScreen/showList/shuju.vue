@@ -107,25 +107,25 @@ export default {
   created() {},
   computed: {},
   mounted() {
-    console.log("modelData",this.modelData)
+    // console.log("modelData",this.modelData)
     this.sensorIdArr = this.modelData.map((item)=>{
       return item.hd_device_sensor_id
     })
-    console.log("sensorIdArr",this.sensorIdArr)
+    // console.log("sensorIdArr",this.sensorIdArr)
     const promise = this.sensorIdArr.map((item) => {
       const data = {
         sensor_ids: item,
         group_type: 5,
-        interval: 8
+        interval: 30
       }
       return selectSensorData2(data)
     })
     Promise.all(promise).then(values => {
-        console.log(values,"all"); 
+        // console.log(values,"all"); 
         this.sensorHistoryData = values.map((item)=>{
           return item.data
         })
-        console.log("sensorHistoryData",this.sensorHistoryData)
+        // console.log("sensorHistoryData",this.sensorHistoryData)
         this.navList = JSON.parse(JSON.stringify(this.modelData))
         this.navList.map((it, index) => {
           this.sensorHistoryData.some(item => {
@@ -141,7 +141,6 @@ export default {
             }
           });
         });
-        console.log(this.navList,1245)
         this.initEchart();
     }).catch((err) => {
         console.log(err,"allBad"); 
