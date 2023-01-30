@@ -13,7 +13,7 @@
             </el-select>
           </div>
           <ul class="nav">
-            <li class="item" v-for="(item, index) in navList" :key="index" :class="{ isActive: index == toggleIndex }" @click="HandelToggle(index,item.router)">{{item.name}}</li>
+            <li class="item" v-for="(item, index) in navList" :key="index" :class="{ isActive: item.router == selectTag }" @click="HandelToggle(index,item.router)">{{item.name}}</li>
           </ul>
         </div>
         <div class="header-right">
@@ -48,31 +48,32 @@ export default {
             list:[],
             value:'',
             toggleIndex: 0,
+            selectTag: "", //选择菜单
             navList:[
               {
                 name:'首页',
                 type:'home',
-                router:'bigScreenHome'
+                router:'/bigScreen/bigScreenHome',
               },
               {
                 name:'策略',
                 type:'strategy',
-                router:'bigScreenStrategy'
+                router:'/bigScreen/bigScreenStrategy',
               },
               {
                 name:'日志',
                 type:'log',
-                router:'bigScreenLog'
+                router:'/bigScreen/bigScreenLog',
               },
               {
                 name:'数据',
                 type:'data',
-                router:'bigScreenData'
+                router:'/bigScreen/bigScreenData',
               },
               {
                 name:'视频',
                 type:'sxt',
-                router:'bigScreenSxt'
+                router:'/bigScreen/bigScreenSxt',
               },
             ]
         };
@@ -90,7 +91,16 @@ export default {
             this.dateYear = date.format('YYYY-MM-DD' + ' ');
             this.dateWeek = date.format(this.weekday[date.day()]);
         }, 1000)
-        this.HandelToggle(0,'bigScreenHome')
+        // this.HandelToggle(0,'bigScreenHome')
+    },
+    watch: {
+      "$route.path": {
+        handler(val) {
+          console.log("菜单：", val); //'/bigScreen/bigScreenLog'
+          this.selectTag = val;	//val是路由跳转的path
+        },
+        immediate: true //立即执行
+      }
     },
     beforeDestroy(){
         if(this.timer){
@@ -117,19 +127,19 @@ export default {
         })
       },
       handleChange(){
-        this.$router.replace({
-          path: "/bigScreen",
+        this.$router.push({
+          path: "/bigScreen/bigScreenHome",
           query: {
             bs_base_id: this.bs_base_id,
             id: this.value,
           },
         });
-        this.$router.go(0)
+        this.$router.go(0) //强制刷新
       },
       HandelToggle(index,router){
         this.toggleIndex = index;
         this.$router.push({
-          path: '/'+router,
+          path: router,
           query: {
             bs_base_id: this.bs_base_id,
             id: this.value,

@@ -19,6 +19,7 @@ export default {
 <style scoped>
 .box{
   display: flex;
+  height: 100%;
 }
 .sidebar{
   width: 270px;

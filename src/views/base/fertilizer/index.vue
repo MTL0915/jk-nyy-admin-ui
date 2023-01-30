@@ -324,7 +324,7 @@ export default {
     handleLook(row) {
       console.log(row);
       this.$router.push({
-        path: "/bigScreen",
+        path: "/bigScreen/bigScreenHome",
         query: {
           bs_base_id: this.bs_base_id,
           id: row.id,

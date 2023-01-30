@@ -809,10 +809,9 @@ export const constantRouterMap = [
            component: () =>
              import("@/views/base/fertilizer/module/fertilizerScreen/index"),
            hidden: true,
-           redirect: "/bigScreenHome",
            children: [
              {
-               path: "/bigScreenHome",
+               path: "bigScreenHome",
                component: () =>
                  import("@/views/base/fertilizer/module/fertilizerScreen/home"),
                name: "水肥大屏首页",
@@ -821,7 +820,7 @@ export const constantRouterMap = [
                }
              },
              {
-               path: "/bigScreenLog",
+               path: "bigScreenLog",
                component: () =>
                  import("@/views/base/fertilizer/module/fertilizerScreen/log"),
                name: "水肥大屏日志",
