@@ -33,7 +33,7 @@
 <script>
 // 显示时间
 import dayjs from 'dayjs'
-import { productSfList } from '@/api/shuifei'
+import { productSfList, productSfDetail } from '@/api/shuifei'
 export default {
     name:'Header',
     props:['value'],
@@ -75,7 +75,8 @@ export default {
                 type:'sxt',
                 router:'/bigScreen/bigScreenSxt',
               },
-            ]
+            ],
+            hd_device_id:''
         };
     },
     created(){
@@ -92,6 +93,7 @@ export default {
             this.dateWeek = date.format(this.weekday[date.day()]);
         }, 1000)
         // this.HandelToggle(0,'bigScreenHome')
+        this.getProductSfDetail()
     },
     watch: {
       "$route.path": {
@@ -126,6 +128,19 @@ export default {
           }
         })
       },
+      // 根据水肥id获取到主设备的32位id
+      getProductSfDetail(){
+        const data = {
+          id: this.$route.query.id,
+        }
+        productSfDetail(data)
+          .then(res => {
+            if (res.code === 200) {
+              this.hd_device_id = res.data.hd_device_id
+            }
+          })
+      },
+      // 下拉列表切换
       handleChange(){
         this.$router.push({
           path: "/bigScreen/bigScreenHome",
@@ -136,6 +151,7 @@ export default {
         });
         this.$router.go(0) //强制刷新
       },
+      // nav导航栏切换
       HandelToggle(index,router){
         this.toggleIndex = index;
         this.$router.push({
@@ -143,6 +159,7 @@ export default {
           query: {
             bs_base_id: this.bs_base_id,
             id: this.value,
+            hd_device_id: this.hd_device_id,
           },
         });
       },
