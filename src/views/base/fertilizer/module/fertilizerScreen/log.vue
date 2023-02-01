@@ -2,13 +2,16 @@
   <div class="box">
     <div class="sidebar">
       <ul class="nav">
-        <li><a id="_1" href="#" @click="type='Sta';init()">Menu1</a></li>
-        <li><a id="_2" href="#">Menu2</a></li>
+        <!-- <li @click="type='';init()">全部</li> -->
+        <!-- <li @click="type='Sta';init()">灌溉日志</li>
+        <li @click="type='DeviceAlarm';init()">警报日志</li>
+        <li @click="type='Online';init()">设备日志</li> -->
+        <li v-for="(item, index) in navList" :key="index" :class="{ isActive: index == toggleIndex }" @click="type=item.type;init();HandelToggle(index)">{{item.name}}</li>
       </ul>
     </div>
     <div class="content">
-      <el-card shadow="never">
-        <div style="text-align:right;">
+      <el-card shadow="never" class="card">
+        <div style="text-align:right;color:#fff">
           <!-- <el-select
             size="mini"
             v-model="rs_facilities_id"
@@ -107,7 +110,7 @@
           <el-table-column
             prop="i_date"
             label="时间"
-            min-width="100"
+            min-width="120"
           >
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.i_date) }}</span>
@@ -116,12 +119,12 @@
           <el-table-column
             prop="type"
             label="类型"
-            min-width="80"
+            min-width="100"
           />
           <el-table-column
             prop="u_name"
             label="操作人"
-            min-width="80"
+            min-width="100"
           />
           <!--
         <el-table-column
@@ -136,20 +139,20 @@
             min-width="250"
           />
         </el-table>
-        <div class="flex bottom-bar">
-          <div class="pagination">
-            <!--分页组件-->
-            <el-pagination
-              :total="total"
-              :current-page="cur_page"
-              background
-              layout="total, sizes,prev, pager, next"
-              @size-change="sizeChange"
-              @current-change="pageChange"
-            />
-          </div>
-        </div>
       </el-card>
+      <div class="flex bottom-bar">
+        <div class="pagination">
+          <!--分页组件-->
+          <el-pagination
+            :total="total"
+            :current-page="cur_page"
+            background
+            layout="total, sizes,prev, pager, next"
+            @size-change="sizeChange"
+            @current-change="pageChange"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -240,7 +243,22 @@ export default {
           value: "DeviceAlarm"
         },
       ],
-      webType: ''
+      webType: '',
+      navList:[
+        {
+          name:'灌溉日志',
+          type:'Sta',
+        },
+        {
+          name:'警报日志',
+          type:'DeviceAlarm',
+        },
+        {
+          name:'设备日志',
+          type:'Online',
+        },
+      ],
+      toggleIndex: 0,
     }
   },
   mounted () {
@@ -322,7 +340,11 @@ export default {
       data.forEach(element => {
         element.type = getLogTypeDes(element.type);
       })
-    }
+    },
+    // nav导航栏切换
+    HandelToggle(index,router){
+      this.toggleIndex = index;
+    },
   }
 }
 </script>
@@ -331,20 +353,62 @@ export default {
 .box{
   display: flex;
   height: 100%;
+  margin-top: 30px;
 }
 .sidebar{
-  width: 270px;
-  height: 100%;
-  /* background-color: #acacac; */
+  width: 15%;
+  height: 82%;
+  background: url(~@/assets/images/shuifeiji/log/log_left_bg.png) no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sidebar .nav{
+  height:300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  /* align-items: center; */
+}
+.sidebar .nav li{
+  cursor: pointer;
+  list-style-type: none;
+  background: url(~@/assets/images/shuifeiji/log/log_choose.png) no-repeat;
+  width: 159px;
+  height: 64px;
+  text-align: center;
+  line-height: 64px;
+  font-size: 20px;
+  text-indent: 30px;
+  margin: 0 auto;
+}
+.sidebar .nav li.isActive{
+  background: url(~@/assets/images/shuifeiji/log/log_choose_on.png) no-repeat;
+  width: 231px;
+  height: 80px;
+  line-height: 80px;
+  font-size: 24px;
+  text-indent: 80px;
+  margin: 0;
 }
 .content{
-  width: calc(100% - 270px);
-  height: 100%;
-  /* background-color: #abcdef; */
+  margin-left: 2%;
+  width: 80%;
+  height: 82%;
+  background: url(~@/assets/images/shuifeiji/log/log_right_bg.png) no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.card{
+  width:92%;
+  margin:0 auto;
 }
 .bottom-bar{
   text-align: center;
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .el-card{
   background-color:unset;
@@ -363,6 +427,25 @@ export default {
   background-color: #063d6d;
 }
 ::v-deep .el-table--enable-row-hover .el-table__body tr:hover>td{
-  background-color: #063d6d !important;
+  background-color: #063d6d;
+}
+::v-deep .el-table td, .el-table th{
+  padding:17px 0;
+}
+::v-deep .el-table th>.cell{
+  padding-left: 45px;
+  font-size: 16px;
+}
+::v-deep .el-table .cell{
+  padding-left: 45px;
+  font-size: 14px;
+}
+::v-deep .el-pagination__total{
+  color:#008ffd;
+}
+::v-deep .el-pagination.is-background .btn-next,::v-deep .el-pagination.is-background .btn-prev,::v-deep .el-pagination.is-background .el-pager li {
+  background-color: unset;
+  color: #008ffd;
+  border: 1px solid #008ffd;
 }
 </style>

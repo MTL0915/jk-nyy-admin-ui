@@ -35,6 +35,7 @@ export default {
   background: url("~@/assets/images/shuifeiji/底图.png") no-repeat;
   background-size:cover;
   min-height: 931px;
+  min-width: 1920px;
   color: #fff;
 }
 </style>
