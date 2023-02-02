@@ -11,7 +11,7 @@
     </div>
     <div class="content">
       <el-card shadow="never" class="card">
-        <div style="text-align:right;color:#fff">
+        <div class="card-time">
           <!-- <el-select
             size="mini"
             v-model="rs_facilities_id"
@@ -75,29 +75,56 @@
             >
             </el-option>
           </el-select> -->
-          选择日期：
-          <el-date-picker
-            size="mini"
-            v-model="start_time"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            @click="cur_page=1;init()"
-            clearable
-            type="datetime"
-          />
-          -
-          <el-date-picker
-            size="mini"
-            v-model="end_time"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            @click="cur_page=1;init()"
-            clearable
-            type="datetime"
-          />
-          <el-button
-            type="primary"
-            size="mini"
-            @click="cur_page=1;init()"
-          >搜索</el-button>
+          <div
+            class="timeTypeChose"
+            style="width:315px;text-align:center;"
+          >
+            <span
+              @click="chooseTime(1, '1')"
+              :class="dayChoose == '1' ? 'timeActive' : ''"
+            >今天</span>
+            <span
+              @click="chooseTime(7, '7')"
+              :class="dayChoose == '7' ? 'timeActive' : ''"
+            >7天</span>
+            <span
+              @click="chooseTime(15, '15')"
+              :class="dayChoose == '15' ? 'timeActive' : ''"
+            >15天</span>
+            <span
+              @click="chooseTime(30, '30')"
+              :class="dayChoose == '30' ? 'timeActive' : ''"
+            >30天</span>
+            <span
+              @click="userDefined()
+              "
+              :class="dayChoose == 'userDefined' ? 'timeActive' : ''"
+            >自定义</span>
+          </div>
+          <div class="userDefinedTime" ref="userDefinedTime">
+            <el-date-picker
+              size="mini"
+              v-model="start_time"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              @click="cur_page=1;init()"
+              clearable
+              type="datetime"
+            />
+            -
+            <el-date-picker
+              size="mini"
+              v-model="end_time"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              @click="cur_page=1;init()"
+              clearable
+              type="datetime"
+            />
+            <el-button
+              type="primary"
+              size="mini"
+              @click="cur_page=1;init()"
+            >搜索</el-button>
+          </div>
         </div>
 
         <el-table
@@ -259,6 +286,8 @@ export default {
         },
       ],
       toggleIndex: 0,
+      dayChoose: '1',
+      day: 1
     }
   },
   mounted () {
@@ -342,8 +371,41 @@ export default {
       })
     },
     // nav导航栏切换
-    HandelToggle(index,router){
+    HandelToggle(index){
       this.toggleIndex = index;
+    },
+    //时间选择
+    chooseTime (value, text) {
+      this.$refs.userDefinedTime.style.display = "none"
+      this.dayChoose = text;
+      this.day = value;
+      this.start_time = ''
+      this.end_time = ''
+      //实时
+      this.start_time = this.initTime();
+      this.init()
+    },
+    //时间初始化
+    initTime () {
+      const time = new Date().getTime();
+      const num = (this.day - 1) * 24 * 60 * 60 * 1000;
+      const start = new Date(time - num);
+      const y = start.getFullYear();
+      const M =
+        start.getMonth() + 1 > 9
+          ? start.getMonth() + 1
+          : "0" + (start.getMonth() + 1);
+      const d = start.getDate() > 9 ? start.getDate() : "0" + start.getDate();
+      return `${y}-${M}-${d} 00:00:00`;
+    },
+    //自定义按钮事件
+    userDefined () {
+      this.dayChoose = "userDefined";
+      this.start_time = ""
+      this.end_time = ""
+      console.log(this.$refs.userDefinedTime)
+      this.$refs.userDefinedTime.style.display = "block"
+      console.log(this.start_time,this.end_time)
     },
   }
 }
@@ -401,6 +463,33 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+}
+.card-time{
+  display: flex;
+  text-align: right;
+  color: #fff;
+  justify-content: right;
+}
+.timeActive{
+  background:#0196f2;  
+}
+.timeTypeChose{
+  border-radius: 5px;
+  overflow: hidden;
+  background: #0196f28a;
+  color: #fff;
+  font-size: 12px;
+  margin-right:10px;
+}
+.timeTypeChose span{
+  padding: 10px 0;
+  text-align: center;
+  width: 60px;
+  display: inline-block;
+  cursor: pointer;
+}
+.userDefinedTime{
+  display: none;
 }
 .card{
   width:92%;
