@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="nav-box">
     <div class="sidebar">
       <ul class="nav">
         <!-- <li @click="type='';init()">全部</li> -->
@@ -412,7 +412,7 @@ export default {
 </script>
 
 <style scoped>
-.box{
+.nav-box{
   display: flex;
   height: 100%;
   margin-top: 30px;

@@ -123,7 +123,6 @@ export default {
         }
         productSfList(_params).then(res => {
           if (res.code === 200) {
-            // this.value = this.$parent.allData.id
             this.list = res.data.content
           }
         })

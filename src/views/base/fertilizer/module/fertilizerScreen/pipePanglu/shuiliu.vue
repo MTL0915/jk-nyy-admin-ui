@@ -23,7 +23,7 @@ export default {
       this.tiaozhengshuiliu();
     });
   },
-    beforeDestroy(){
+  beforeDestroy(){
     this.$bus.$off("waterEvent")
   },
   components: {

@@ -21,7 +21,6 @@ import MyWebSocket from "@/utils/MyWebSocket";
 import { getToken } from "@/utils/auth";
 
 // import { getTokenMethod } from "@/api/login";
-import { getShuifeiData } from "@/api/getShuifeiData";
 
 import draggable from 'vuedraggable'
 
@@ -29,7 +28,7 @@ import bgLeftPanglu from "./pipePanglu/bgLeft.vue";
 import bgLeftZaixian from "./pipeZaixian/bgLeft.vue";
 import bgRight from "./pipePanglu/bgRight.vue";
 import showList from "./showList";
-import { productSfDetail, deviceList } from '@/api/shuifei'
+import { productSfDetail, deviceList, getDetailById } from '@/api/shuifei'
 export default {
   data() {
     return {
@@ -71,13 +70,6 @@ export default {
     const PKid2 = "PK01B-2111020";
     // axios获取传感器
     const PCid = "PC01B-2110019";
-
-    // Promise.all([getShuifeiData(PKid1), getShuifeiData(PKid2), getShuifeiData(PCid)]).then(([res1,res2,res3]) => {
-    //   this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
-    //   this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
-    //   this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
-    // });
-
 
     // websocket相关
     // if (Vue.prototype.$ws) {
@@ -131,7 +123,7 @@ export default {
                 this.PCid = this.allData.hd_device_childs.filter((item) => {
                   return item.device_id.slice(0,2) == "PC"
                 })[0].device_id
-                Promise.all([getShuifeiData(this.PKid1), getShuifeiData(this.PKid2), getShuifeiData(this.PCid)]).then(([res1,res2,res3]) => {
+                Promise.all([getDetailById({ device_id: this.PKid1 }), getDetailById({ device_id: this.PKid2 }), getDetailById({ device_id: this.PCid })]).then(([res1,res2,res3]) => {
                   this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
                   this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
                   this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
@@ -146,7 +138,7 @@ export default {
               this.PCid = this.allData.hd_device_childs.filter((item) => {
                 return item.device_id.slice(0,2) == "PC"
               })[0].device_id
-              Promise.all([getShuifeiData(this.PKid1), getShuifeiData(this.PCid)]).then(([res1,res3]) => {
+              Promise.all([getDetailById(this.PKid1), getDetailById(this.PCid)]).then(([res1,res3]) => {
                 this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor});
                 this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor});
                 this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
@@ -173,7 +165,7 @@ export default {
             //   console.log(this.PKid1,'pk1')
             //   console.log(this.PKid2,'pk2')
             //   console.log(this.PCid,'pc')
-            //   Promise.all([getShuifeiData(this.PKid1), getShuifeiData(this.PKid2), getShuifeiData(this.PCid)]).then(([res1,res2,res3]) => {
+            //   Promise.all([getDetailById(this.PKid1), getDetailById(this.PKid2), getDetailById(this.PCid)]).then(([res1,res2,res3]) => {
             //     this.$store.commit("SET_EQUIPMENT_DATA", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
             //     this.$store.commit("INIT_CODE", {pkArr01:res1.data.sensor, pkArr02:res2.data.sensor});
             //     this.$store.commit("SET_SENSOR_DATA", res3.data.sensor);
